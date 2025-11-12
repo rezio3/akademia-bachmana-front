@@ -1,0 +1,8 @@
+.side-menu {
+  display: flex;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: -20px 0 30px black;
+}
