@@ -1,15 +1,12 @@
 import { CardContent, CardActionArea } from "@mui/material";
 import HeaderText from "../elements/HeaderText";
-import {
-  displayNameByLocation,
-  Location,
-  type LocationEnum,
-} from "./locations";
+
 import type React from "react";
+import { getLocationLabelById, type LocationType } from "../../common";
 
 type LocationButtonsProps = {
-  activeLocation: LocationEnum | null;
-  setActiveLocation: (location: LocationEnum) => void;
+  activeLocation: LocationType | null;
+  setActiveLocation: (location: LocationType) => void;
 };
 
 const LocationButtons: React.FC<LocationButtonsProps> = ({
@@ -17,7 +14,7 @@ const LocationButtons: React.FC<LocationButtonsProps> = ({
   setActiveLocation,
 }) => {
   const CardWrapper: React.ElementType = CardActionArea;
-  const locationList: LocationEnum[] = Object.values(Location);
+  const locationList: LocationType[] = Object.values(Location);
 
   return (
     <div className="d-flex gap-2">
@@ -38,7 +35,7 @@ const LocationButtons: React.FC<LocationButtonsProps> = ({
           >
             <CardContent className="d-flex ">
               <HeaderText fontSize={20}>
-                {displayNameByLocation[locationId]}
+                {getLocationLabelById(locationId)}
               </HeaderText>
             </CardContent>
           </CardWrapper>

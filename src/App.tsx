@@ -10,8 +10,8 @@ import AdminPage from "./pages/AdminPage";
 import { urlRoutes } from "./routes/urlRoutes";
 import DashboardPage from "./pages/DashboardPage";
 import PlacowkiPage from "./pages/PlacowkiPage";
-import LeadersPage from "./pages/LeadersPage";
 import AudycjePage from "./pages/AudycjePage";
+import PersonsPage from "./pages/PersonsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,7 +42,7 @@ function App() {
                   <Route index element={<DashboardPage />} />
                   <Route path="audycje" element={<AudycjePage />} />
                   <Route path="placowki" element={<PlacowkiPage />} />
-                  <Route path="prowadzacy" element={<LeadersPage />} />
+                  <Route path="prowadzacy" element={<PersonsPage />} />
                   {/* <Route path="mapy" element={<MapyPage />} /> */}
                 </Route>
               </Routes>

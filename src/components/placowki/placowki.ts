@@ -11,13 +11,13 @@ export const getPlacowkiList = async (
     limit: limit.toString(),
   });
   if (filter?.trim()) query.append("search", filter);
-  const res = await fetch(`${baseUrl}api/placowki?${query.toString()}`);
+  const res = await fetch(`${baseUrl}api/places?${query.toString()}`);
   if (!res.ok) throw new Error("Błąd podczas pobierania listy placówek.");
   return res.json();
 };
 
 export const addPlacowka = async (placowka: Placowka) => {
-  const res = await fetch("http://localhost:5000/api/placowki", {
+  const res = await fetch(`${baseUrl}api/places`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(placowka),
@@ -36,8 +36,8 @@ export const updatePlacowka = async (placowka: Placowka) => {
     throw new Error("Brak ID placówki do edycji");
   }
 
-  const res = await fetch(`${baseUrl}api/placowki/${placowka._id}`, {
-    method: "PUT", // lub PATCH jeśli wolisz częściową aktualizację
+  const res = await fetch(`${baseUrl}api/places/${placowka._id}`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(placowka),
   });
@@ -52,7 +52,7 @@ export const updatePlacowka = async (placowka: Placowka) => {
 };
 
 export const deletePlacowka = async (_id: string) => {
-  const res = await fetch(`${baseUrl}api/placowki/${_id}`, {
+  const res = await fetch(`${baseUrl}api/places/${_id}`, {
     method: "DELETE",
   });
 
