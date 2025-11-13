@@ -199,10 +199,10 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
                 margin="dense"
               >
                 <InputLabel id="demo-simple-select-label">
-                  Lokalizacja
+                  Lokalizacja*
                 </InputLabel>
                 <Select
-                  label="Lokalizacja"
+                  label="Lokalizacja*"
                   labelId="locationTypeLabelId"
                   id="locationType"
                   {...field}
