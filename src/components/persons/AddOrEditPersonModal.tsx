@@ -114,7 +114,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              label="Nazwa placówki*"
+              label="Imię i nazwisko*"
               fullWidth
               margin="dense"
               error={!!fieldState.error}
