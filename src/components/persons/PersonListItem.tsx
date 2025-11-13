@@ -1,7 +1,7 @@
 import "./PersonListItem.scss";
 import HeaderText from "../elements/HeaderText";
 import { Button, Divider } from "@mui/material";
-import { getLocationLabelById } from "../../common";
+import { getLocationLabelById, getPersonTypeLabelById } from "../../common";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { queryKeys } from "../../assets/queryKeys";
 import { deletePerson, type Person } from "./persons";
 
 import PersonIcon from "@mui/icons-material/Person";
+import AddOrEditPersonModal from "./AddOrEditPersonModal";
 
 type PersonListItemProps = {
   person: Person;
@@ -41,8 +42,8 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
           <HeaderText fontSize={18} fontWeight={500}>
             {person.name}
           </HeaderText>
-          <HeaderText headerType="h5" fontSize={18} fontWeight={800}>
-            - Muzyk
+          <HeaderText headerType="h5" fontSize={18} fontWeight={600}>
+            - {getPersonTypeLabelById(person.personType)}
           </HeaderText>
         </div>
         <HeaderText headerType="h5" fontSize={16} fontWeight={500}>
@@ -87,11 +88,11 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
           <DeleteIcon fontSize="small" className="ms-1" />
         </Button>
       </div>
-      {/* <AddOrEditPlaceModal
+      <AddOrEditPersonModal
         open={openEdit}
         handleClose={() => setOpenEdit(false)}
-        placowkaToEdit={person}
-      /> */}
+        personToEdit={person}
+      />
       <ConfirmModal
         open={openDeleteConfirmModal}
         handleClose={() => setOpenDeleteConfirmModal(false)}

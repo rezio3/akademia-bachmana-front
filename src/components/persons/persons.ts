@@ -67,9 +67,9 @@ export const deletePerson = async (_id: string) => {
 export type Person = {
   _id?: string;
   name: string;
-  personType: PersonType;
+  personType: PersonType | string;
   phone?: string;
   email?: string;
-  location: LocationType;
+  location: LocationType | string;
   description?: string;
 };

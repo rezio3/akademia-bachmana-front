@@ -14,7 +14,7 @@ const PersonsPage = () => {
   const [filter, dispatch] = useReducer(filterReducer, "");
   const personsLimitInOnePage = 10;
   const { data, isLoading, isError } = useQuery<any>({
-    queryKey: queryKeys.placowkiPage.placowkiList(currentPage, filter),
+    queryKey: queryKeys.personsPage.personsList(currentPage, filter),
     queryFn: () => getPersonsList(currentPage, personsLimitInOnePage, filter),
   });
 
