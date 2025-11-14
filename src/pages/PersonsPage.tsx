@@ -1,8 +1,7 @@
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import PageTitle from "../components/elements/PageTitle";
 import Actions from "../components/persons/Actions";
 import PersonsList from "../components/persons/PersonsList";
-import { filterReducer } from "../reducers/filterReducer";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../assets/queryKeys";
 import { getPersonsList } from "../components/persons/persons";
@@ -11,20 +10,26 @@ import SearchBar from "../components/elements/SearchBar";
 
 const PersonsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filter, dispatch] = useReducer(filterReducer, "");
+  const [debouncedFilter, setDebouncedFilter] = useState("");
   const personsLimitInOnePage = 10;
   const { data, isLoading, isError } = useQuery<any>({
-    queryKey: queryKeys.personsPage.personsList(currentPage, filter),
-    queryFn: () => getPersonsList(currentPage, personsLimitInOnePage, filter),
+    queryKey: queryKeys.personsPage.personsList(currentPage, debouncedFilter),
+    queryFn: () =>
+      getPersonsList(currentPage, personsLimitInOnePage, debouncedFilter),
   });
 
   const persons = data?.persons || [];
   const totalPages = data?.totalPages || 1;
+
+  const handleSearch = (value: string) => {
+    setDebouncedFilter(value);
+    setCurrentPage(1);
+  };
   return (
     <>
       <PageTitle>Prowadzący i muzycy</PageTitle>
       <Actions />
-      <SearchBar filter={filter} dispatch={dispatch} />
+      <SearchBar onSearch={handleSearch} />
       {isLoading ? (
         <Skeleton count={5} height={70} className="mt-2" />
       ) : (
