@@ -15,10 +15,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPerson, updatePerson, type Person } from "./persons";
 import { Controller, useForm } from "react-hook-form";
 import {
-  LocationType,
   LocationTypeLabels,
-  PersonType,
+  LocationTypeMap,
   PersonTypeLabels,
+  PersonTypeMap,
 } from "../../common";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
@@ -167,9 +167,9 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
                   id="personType"
                   {...field}
                 >
-                  {Object.entries(PersonType).map(([key, value]) => (
+                  {Object.entries(PersonTypeMap).map(([key, value]) => (
                     <MenuItem key={value} value={value}>
-                      {PersonTypeLabels[key as keyof typeof PersonType]}
+                      {PersonTypeLabels[key as keyof typeof PersonTypeMap]}
                     </MenuItem>
                   ))}
                 </Select>
@@ -206,9 +206,9 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
                   id="locationType"
                   {...field}
                 >
-                  {Object.entries(LocationType).map(([key, value]) => (
+                  {Object.entries(LocationTypeMap).map(([key, value]) => (
                     <MenuItem key={value} value={value}>
-                      {LocationTypeLabels[key as keyof typeof LocationType]}
+                      {LocationTypeLabels[key as keyof typeof LocationTypeMap]}
                     </MenuItem>
                   ))}
                 </Select>

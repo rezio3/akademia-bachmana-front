@@ -37,7 +37,7 @@ const SideMenu = () => {
     {
       text: "Placówki",
       icon: <HomeIcon fontSize="small" />,
-      path: urlRoutes.placowki,
+      path: urlRoutes.places,
     },
     {
       text: "Prowadzący i muzycy",

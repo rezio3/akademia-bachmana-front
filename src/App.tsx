@@ -9,7 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPage from "./pages/AdminPage";
 import { urlRoutes } from "./routes/urlRoutes";
 import DashboardPage from "./pages/DashboardPage";
-import PlacowkiPage from "./pages/PlacowkiPage";
+import PlacesPage from "./pages/PlacesPage";
 import AudycjePage from "./pages/AudycjePage";
 import PersonsPage from "./pages/PersonsPage";
 
@@ -41,7 +41,7 @@ function App() {
                 >
                   <Route index element={<DashboardPage />} />
                   <Route path="audycje" element={<AudycjePage />} />
-                  <Route path="placowki" element={<PlacowkiPage />} />
+                  <Route path="places" element={<PlacesPage />} />
                   <Route path="prowadzacy" element={<PersonsPage />} />
                   {/* <Route path="mapy" element={<MapyPage />} /> */}
                 </Route>

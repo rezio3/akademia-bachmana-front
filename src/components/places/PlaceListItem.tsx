@@ -1,5 +1,5 @@
-import { deletePlacowka, type Placowka } from "./placowki";
-import "./PlacowkaListItem.scss";
+import { deletePlace, type Place } from "./places";
+import "./PlaceListItem.scss";
 import HeaderText from "../elements/HeaderText";
 import { Button, Divider } from "@mui/material";
 import { getLocationLabelById } from "../../common";
@@ -11,20 +11,20 @@ import ConfirmModal from "../elements/ConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../assets/queryKeys";
 
-type PlacowkaListItemProps = {
-  placowka: Placowka;
+type PlaceListItemProps = {
+  place: Place;
 };
 
-const PlacowkaListItem: React.FC<PlacowkaListItemProps> = ({ placowka }) => {
+const PlaceListItem: React.FC<PlaceListItemProps> = ({ place }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
   const queryClient = useQueryClient();
 
-  const deletePlacowkaMutation = useMutation({
-    mutationFn: (_id: string) => deletePlacowka(_id),
+  const deletePlaceMutation = useMutation({
+    mutationFn: (_id: string) => deletePlace(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placowkiPage.placowkiList(1, ""),
+        queryKey: queryKeys.placesPage.placesList(1, ""),
       });
     },
     onError: (error) => {
@@ -35,10 +35,10 @@ const PlacowkaListItem: React.FC<PlacowkaListItemProps> = ({ placowka }) => {
     <>
       <div className="w-100 d-flex mb-2 align-items-center justify-content-between">
         <HeaderText fontSize={18} fontWeight={500}>
-          {placowka.name}
+          {place.name}
         </HeaderText>
         <HeaderText headerType="h5" fontSize={16} fontWeight={500}>
-          {getLocationLabelById(placowka.locationTypeId)}
+          {getLocationLabelById(place.locationTypeId)}
         </HeaderText>
       </div>
       <Divider
@@ -47,7 +47,7 @@ const PlacowkaListItem: React.FC<PlacowkaListItemProps> = ({ placowka }) => {
           marginBottom: "10px",
         }}
       />
-      <div className="placowka-list-item-table">
+      <div className="place-list-item-table">
         <div className="labels">
           <span>Adres</span>
           <span>Telefon</span>
@@ -57,32 +57,32 @@ const PlacowkaListItem: React.FC<PlacowkaListItemProps> = ({ placowka }) => {
           <span>Komentarz</span>
         </div>
         <div className="values">
-          <span>{placowka.address || "-"}</span>
-          <span>{placowka.phone || "-"}</span>
-          <span>{placowka.email || "-"}</span>
+          <span>{place.address || "-"}</span>
+          <span>{place.phone || "-"}</span>
+          <span>{place.email || "-"}</span>
           <span>
-            {placowka.invoiceEmail || placowka.email || "-"}
+            {place.invoiceEmail || place.email || "-"}
             <br />
-            {placowka.nip ? (
+            {place.nip ? (
               <>
                 <b>NIP: </b>
-                {placowka.nip}
+                {place.nip}
               </>
             ) : (
               ""
             )}
             <br />
-            {placowka.regon ? (
+            {place.regon ? (
               <>
                 <b>REGON: </b>
-                {placowka.regon}
+                {place.regon}
               </>
             ) : (
               ""
             )}
           </span>
-          <span>{placowka.contactPerson || "-"}</span>
-          <span>{placowka.description || "-"}</span>
+          <span>{place.contactPerson || "-"}</span>
+          <span>{place.description || "-"}</span>
         </div>
       </div>
       <div className="d-flex gap-2 mt-2">
@@ -108,13 +108,13 @@ const PlacowkaListItem: React.FC<PlacowkaListItemProps> = ({ placowka }) => {
       <AddOrEditPlaceModal
         open={openEdit}
         handleClose={() => setOpenEdit(false)}
-        placowkaToEdit={placowka}
+        placeToEdit={place}
       />
       <ConfirmModal
         open={openDeleteConfirmModal}
         handleClose={() => setOpenDeleteConfirmModal(false)}
         onConfirm={() => {
-          deletePlacowkaMutation.mutate(placowka._id!);
+          deletePlaceMutation.mutate(place._id!);
         }}
         description="Czy na pewno chcesz usunąć tę placówkę?"
       />
@@ -122,4 +122,4 @@ const PlacowkaListItem: React.FC<PlacowkaListItemProps> = ({ placowka }) => {
   );
 };
 
-export default PlacowkaListItem;
+export default PlaceListItem;

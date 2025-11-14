@@ -1,15 +1,15 @@
 import { Pagination, Stack } from "@mui/material";
-import type { Placowka } from "./placowki";
-import PlacowkaListItem from "./PlacowkaListItem";
+import PlaceListItem from "./PlaceListItem";
 import ListItemWrapper from "../elements/ListItemWrapper";
-type PlacowkiListProps = {
-  placowki: Placowka[];
+import type { Place } from "./places";
+type PlacesListProps = {
+  places: Place[];
   page: number;
   onPageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
   totalPages: number;
 };
-const PlacowkiList: React.FC<PlacowkiListProps> = ({
-  placowki,
+const PlacesList: React.FC<PlacesListProps> = ({
+  places,
   page,
   onPageChange,
   totalPages,
@@ -17,9 +17,9 @@ const PlacowkiList: React.FC<PlacowkiListProps> = ({
   return (
     <div className="d-flex flex-column align-items-center">
       <ul className="list-unstyled p-0 w-100">
-        {placowki.map((placowka, index) => (
-          <ListItemWrapper key={placowka.name + index}>
-            <PlacowkaListItem placowka={placowka} />
+        {places.map((place, index) => (
+          <ListItemWrapper key={place.name + index}>
+            <PlaceListItem place={place} />
           </ListItemWrapper>
         ))}
       </ul>
@@ -35,4 +35,4 @@ const PlacowkiList: React.FC<PlacowkiListProps> = ({
   );
 };
 
-export default PlacowkiList;
+export default PlacesList;

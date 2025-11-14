@@ -12,27 +12,27 @@ import {
 } from "@mui/material";
 import "./AddOrEditPlaceModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addPlacowka, updatePlacowka, type Placowka } from "./placowki";
+import { addPlace, updatePlace, type Place } from "./places";
 import { Controller, useForm } from "react-hook-form";
-import { LocationType, LocationTypeLabels } from "../../common";
+import { LocationTypeLabels, LocationTypeMap } from "../../common";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
 
 type AddOrEditPlaceModalProps = {
   handleClose: () => void;
   open: boolean;
-  placowkaToEdit?: Placowka;
+  placeToEdit?: Place;
 };
 
 const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
   handleClose,
   open,
-  placowkaToEdit,
+  placeToEdit,
 }) => {
   const queryClient = useQueryClient();
 
-  const { control, handleSubmit, reset } = useForm<Placowka>({
-    defaultValues: placowkaToEdit || {
+  const { control, handleSubmit, reset } = useForm<Place>({
+    defaultValues: placeToEdit || {
       name: "",
       phone: "",
       email: "",
@@ -47,7 +47,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
   useEffect(() => {
     if (open) {
       reset(
-        placowkaToEdit || {
+        placeToEdit || {
           name: "",
           phone: "",
           email: "",
@@ -59,13 +59,13 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
         }
       );
     }
-  }, [open, placowkaToEdit, reset]);
+  }, [open, placeToEdit, reset]);
 
   const mutationAdd = useMutation({
-    mutationFn: addPlacowka,
+    mutationFn: addPlace,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placowkiPage.placowkiList(1, ""),
+        queryKey: queryKeys.placesPage.placesList(1, ""),
       });
       reset();
       handleClose();
@@ -75,10 +75,10 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
     },
   });
   const mutationUpdate = useMutation({
-    mutationFn: updatePlacowka,
+    mutationFn: updatePlace,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placowkiPage.placowkiList(1, ""),
+        queryKey: queryKeys.placesPage.placesList(1, ""),
       });
       reset();
       handleClose();
@@ -88,9 +88,9 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
     },
   });
 
-  const onSubmit = (data: Placowka) => {
-    if (placowkaToEdit) {
-      mutationUpdate.mutate({ ...data, _id: placowkaToEdit._id });
+  const onSubmit = (data: Place) => {
+    if (placeToEdit) {
+      mutationUpdate.mutate({ ...data, _id: placeToEdit._id });
     } else {
       mutationAdd.mutate(data);
     }
@@ -103,7 +103,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>
         {" "}
-        {placowkaToEdit ? "Edytuj placówkę" : "Dodaj placówkę"}
+        {placeToEdit ? "Edytuj placówkę" : "Dodaj placówkę"}
       </DialogTitle>
       <DialogContent>
         <Controller
@@ -207,9 +207,9 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
                   id="locationType"
                   {...field}
                 >
-                  {Object.entries(LocationType).map(([key, value]) => (
+                  {Object.entries(LocationTypeMap).map(([key, value]) => (
                     <MenuItem key={value} value={value}>
-                      {LocationTypeLabels[key as keyof typeof LocationType]}
+                      {LocationTypeLabels[key as keyof typeof LocationTypeMap]}
                     </MenuItem>
                   ))}
                 </Select>
@@ -279,7 +279,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
           onClick={onSaveClick}
           disabled={mutationAdd.isPending}
         >
-          {placowkaToEdit ? "Zapisz" : "Dodaj"}
+          {placeToEdit ? "Zapisz" : "Dodaj"}
         </Button>
       </DialogActions>
     </Dialog>

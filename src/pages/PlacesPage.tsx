@@ -1,24 +1,24 @@
 import { useReducer, useState } from "react";
-import PlacowkiList from "../components/placowki/PlacowkiList";
+import PlacesList from "../components/places/PlacesList";
 import { queryKeys } from "../assets/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import SearchBar from "../components/elements/SearchBar";
-import { getPlacowkiList } from "../components/placowki/placowki";
+import { getPlacesList } from "../components/places/places";
 import { filterReducer } from "../reducers/filterReducer";
 import PageTitle from "../components/elements/PageTitle";
 import Skeleton from "../components/elements/Skeleton";
-import Actions from "../components/placowki/Actions";
+import Actions from "../components/places/Actions";
 
-const PlacowkiPage = () => {
+const PlacesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, dispatch] = useReducer(filterReducer, "");
-  const placowkiLimitInOnePage = 10;
+  const placesLimitInOnePage = 10;
   const { data, isLoading, isError } = useQuery<any>({
-    queryKey: queryKeys.placowkiPage.placowkiList(currentPage, filter),
-    queryFn: () => getPlacowkiList(currentPage, placowkiLimitInOnePage, filter),
+    queryKey: queryKeys.placesPage.placesList(currentPage, filter),
+    queryFn: () => getPlacesList(currentPage, placesLimitInOnePage, filter),
   });
 
-  const placowki = data?.placowki || [];
+  const places = data?.places || [];
   const totalPages = data?.totalPages || 1;
 
   return (
@@ -43,10 +43,10 @@ const PlacowkiPage = () => {
               /> */}
             </>
           ) : (
-            <PlacowkiList
-              placowki={placowki}
+            <PlacesList
+              places={places}
               page={currentPage}
-              onPageChange={(_e, value: number) => setCurrentPage(value)}
+              onPageChange={(_e: any, value: number) => setCurrentPage(value)}
               totalPages={totalPages}
             />
           )}
@@ -56,4 +56,4 @@ const PlacowkiPage = () => {
   );
 };
 
-export default PlacowkiPage;
+export default PlacesPage;

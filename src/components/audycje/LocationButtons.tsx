@@ -2,7 +2,11 @@ import { CardContent, CardActionArea } from "@mui/material";
 import HeaderText from "../elements/HeaderText";
 
 import type React from "react";
-import { getLocationLabelById, type LocationType } from "../../common";
+import {
+  getLocationLabelById,
+  LocationTypeMap,
+  type LocationType,
+} from "../../common";
 
 type LocationButtonsProps = {
   activeLocation: LocationType | null;
@@ -14,8 +18,7 @@ const LocationButtons: React.FC<LocationButtonsProps> = ({
   setActiveLocation,
 }) => {
   const CardWrapper: React.ElementType = CardActionArea;
-  const locationList: LocationType[] = Object.values(Location);
-
+  const locationList: LocationType[] = Object.values(LocationTypeMap);
   return (
     <div className="d-flex gap-2">
       {locationList.map((locationId, index) => {

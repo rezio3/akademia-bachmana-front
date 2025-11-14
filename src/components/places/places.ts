@@ -1,7 +1,7 @@
 import { baseUrl } from "../../assets/baseUrl";
 import type { LocationType, Nil } from "../../common";
 
-export const getPlacowkiList = async (
+export const getPlacesList = async (
   page = 1,
   limit = 10,
   filter = ""
@@ -16,11 +16,11 @@ export const getPlacowkiList = async (
   return res.json();
 };
 
-export const addPlacowka = async (placowka: Placowka) => {
+export const addPlace = async (place: Place) => {
   const res = await fetch(`${baseUrl}api/places`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(placowka),
+    body: JSON.stringify(place),
   });
 
   if (!res.ok) {
@@ -31,15 +31,15 @@ export const addPlacowka = async (placowka: Placowka) => {
   return res.json();
 };
 
-export const updatePlacowka = async (placowka: Placowka) => {
-  if (!placowka._id) {
+export const updatePlace = async (place: Place) => {
+  if (!place._id) {
     throw new Error("Brak ID placówki do edycji");
   }
 
-  const res = await fetch(`${baseUrl}api/places/${placowka._id}`, {
+  const res = await fetch(`${baseUrl}api/places/${place._id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(placowka),
+    body: JSON.stringify(place),
   });
 
   if (!res.ok) {
@@ -51,7 +51,7 @@ export const updatePlacowka = async (placowka: Placowka) => {
   return res.json();
 };
 
-export const deletePlacowka = async (_id: string) => {
+export const deletePlace = async (_id: string) => {
   const res = await fetch(`${baseUrl}api/places/${_id}`, {
     method: "DELETE",
   });
@@ -65,7 +65,7 @@ export const deletePlacowka = async (_id: string) => {
   return res.json();
 };
 
-export type Placowka = {
+export type Place = {
   _id?: string;
   name: string;
   phone?: string | Nil;

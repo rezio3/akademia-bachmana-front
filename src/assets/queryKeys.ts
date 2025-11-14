@@ -1,7 +1,7 @@
 export const queryKeys = {
-  placowkiPage: {
-    placowkiList: (page: number, filter: string) => [
-      "placowki",
+  placesPage: {
+    placesList: (page: number, filter: string) => [
+      "places",
       "list",
       page,
       filter,
