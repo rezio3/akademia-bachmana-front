@@ -14,14 +14,10 @@ import "../elements/AddOrEditModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPerson, updatePerson, type Person } from "./persons";
 import { Controller, useForm } from "react-hook-form";
-import {
-  LocationTypeLabels,
-  LocationTypeMap,
-  PersonTypeLabels,
-  PersonTypeMap,
-} from "../../common";
+import { PersonTypeLabels, PersonTypeMap } from "../../common";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
+import SelectLocation from "../Selects/SelectLocation";
 
 type AddOrEditPersonModalProps = {
   handleClose: () => void;
@@ -174,38 +170,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
             control={control}
             rules={{ required: "To pole jest wymagane" }}
             render={({ field, fieldState }) => (
-              <FormControl
-                error={!!fieldState.error}
-                className="w-50"
-                margin="dense"
-              >
-                <InputLabel id="demo-simple-select-label">
-                  Lokalizacja*
-                </InputLabel>
-                <Select
-                  label="Lokalizacja*"
-                  labelId="locationTypeLabelId"
-                  id="locationType"
-                  {...field}
-                >
-                  {Object.entries(LocationTypeMap).map(([key, value]) => (
-                    <MenuItem key={value} value={value}>
-                      {LocationTypeLabels[key as keyof typeof LocationTypeMap]}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {fieldState.error && (
-                  <p
-                    style={{
-                      color: "#d32f2f",
-                      fontSize: "0.8rem",
-                      margin: "3px 14px 0",
-                    }}
-                  >
-                    {fieldState.error.message}
-                  </p>
-                )}
-              </FormControl>
+              <SelectLocation field={field} fieldState={fieldState} />
             )}
           />
         </div>
