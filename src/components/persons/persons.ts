@@ -4,7 +4,7 @@ export const getPersonsList = async (
   page = 1,
   limit = 10,
   filter = ""
-): Promise<any> => {
+): Promise<PersonsResponse> => {
   const query = new URLSearchParams({
     page: page.toString(),
     limit: limit.toString(),
@@ -67,9 +67,14 @@ export const deletePerson = async (_id: string) => {
 export type Person = {
   _id?: string;
   name: string;
-  personType: PersonType | string;
+  personType: PersonType;
   phone?: string;
   email?: string;
-  location: LocationType | string;
+  location: LocationType;
   description?: string;
+};
+
+export type PersonsResponse = {
+  persons: Person[];
+  totalPages: number;
 };

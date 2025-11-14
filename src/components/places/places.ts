@@ -5,7 +5,7 @@ export const getPlacesList = async (
   page = 1,
   limit = 10,
   filter = ""
-): Promise<any> => {
+): Promise<PlacesResponse> => {
   const query = new URLSearchParams({
     page: page.toString(),
     limit: limit.toString(),
@@ -73,8 +73,13 @@ export type Place = {
   address?: string | Nil;
   invoiceEmail?: string | Nil;
   contactPerson?: string | Nil;
-  locationTypeId: LocationType | string;
+  locationTypeId: LocationType;
   description?: string;
   nip?: string;
   regon?: string;
+};
+
+export type PlacesResponse = {
+  totalPages: number;
+  places: Place[];
 };

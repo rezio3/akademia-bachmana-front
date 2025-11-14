@@ -42,7 +42,7 @@ function App() {
                   <Route index element={<DashboardPage />} />
                   <Route path="audycje" element={<AudycjePage />} />
                   <Route path="places" element={<PlacesPage />} />
-                  <Route path="prowadzacy" element={<PersonsPage />} />
+                  <Route path="persons" element={<PersonsPage />} />
                   {/* <Route path="mapy" element={<MapyPage />} /> */}
                 </Route>
               </Routes>

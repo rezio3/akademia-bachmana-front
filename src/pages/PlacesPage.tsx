@@ -3,17 +3,22 @@ import PlacesList from "../components/places/PlacesList";
 import { queryKeys } from "../assets/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import SearchBar from "../components/elements/SearchBar";
-import { getPlacesList } from "../components/places/places";
+import {
+  getPlacesList,
+  type PlacesResponse,
+} from "../components/places/places";
 import PageTitle from "../components/elements/PageTitle";
 import Skeleton from "../components/elements/Skeleton";
-import Actions from "../components/places/Actions";
+// import Actions from "../components/places/Actions";
+import AddOrEditPlaceModal from "../components/places/AddOrEditPlaceModal";
+import Actions from "../components/elements/Actions";
 
 const PlacesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const placesLimitInOnePage = 10;
   const [debouncedFilter, setDebouncedFilter] = useState("");
 
-  const { data, isLoading, isError } = useQuery<any>({
+  const { data, isLoading, isError } = useQuery<PlacesResponse>({
     queryKey: queryKeys.placesPage.placesList(currentPage, debouncedFilter),
     queryFn: () =>
       getPlacesList(currentPage, placesLimitInOnePage, debouncedFilter),
@@ -28,7 +33,10 @@ const PlacesPage = () => {
   return (
     <>
       <PageTitle>Placówki</PageTitle>
-      <Actions />
+      <Actions
+        label="Dodaj placówkę"
+        modal={(props) => <AddOrEditPlaceModal {...props} />}
+      />
       <SearchBar onSearch={handleSearch} />
       {isLoading ? (
         <Skeleton count={5} height={70} className="mt-2" />

@@ -10,7 +10,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import "./AddOrEditPersonModal.scss";
+import "../elements/AddOrEditModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPerson, updatePerson, type Person } from "./persons";
 import { Controller, useForm } from "react-hook-form";
@@ -36,29 +36,11 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const { control, handleSubmit, reset } = useForm<Person>({
-    defaultValues: personToEdit || {
-      name: "",
-      phone: "",
-      email: "",
-      personType: "",
-      location: "",
-      description: "",
-    },
-  });
+  const { control, handleSubmit, reset } = useForm<Person>();
 
   useEffect(() => {
     if (open) {
-      reset(
-        personToEdit || {
-          name: "",
-          phone: "",
-          email: "",
-          personType: "",
-          location: "",
-          description: "",
-        }
-      );
+      reset(personToEdit || {});
     }
   }, [open, personToEdit, reset]);
 
@@ -122,7 +104,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
             />
           )}
         />
-        <div className="add-place-row">
+        <div className="add-or-edit-row">
           <Controller
             name="phone"
             control={control}
@@ -149,7 +131,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
           />
         </div>
 
-        <div className="add-place-row">
+        <div className="add-or-edit-row">
           <Controller
             name="personType"
             control={control}

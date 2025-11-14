@@ -4,75 +4,69 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
-
 import "../elements/AddOrEditModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addPlace, updatePlace, type Place } from "./places";
+import { addAudycja, type Audycja } from "./audycje";
 import { Controller, useForm } from "react-hook-form";
-import { LocationTypeLabels, LocationTypeMap } from "../../common";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
 
-type AddOrEditPlaceModalProps = {
+type AddOrEditAudycjaModalProps = {
   handleClose: () => void;
   open: boolean;
-  placeToEdit?: Place;
+  audycjaToEdit?: Audycja;
 };
 
-const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
+const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
   handleClose,
   open,
-  placeToEdit,
+  audycjaToEdit,
 }) => {
   const queryClient = useQueryClient();
 
-  const { control, handleSubmit, reset } = useForm<Place>();
+  const { control, handleSubmit, reset } = useForm<Audycja>();
 
   useEffect(() => {
     if (open) {
-      reset(placeToEdit || {});
+      reset(audycjaToEdit || {});
     }
-  }, [open, placeToEdit, reset]);
+  }, [open, audycjaToEdit, reset]);
 
   const mutationAdd = useMutation({
-    mutationFn: addPlace,
+    mutationFn: addAudycja,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placesPage.placesList(1, ""),
+        queryKey: queryKeys.audycjePage.audycjeList(),
       });
       reset();
       handleClose();
     },
     onError: (error) => {
-      console.error("Błąd podczas dodawania placówki:", error);
+      console.error("Błąd podczas dodawania audycji:", error);
     },
   });
-  const mutationUpdate = useMutation({
-    mutationFn: updatePlace,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.placesPage.placesList(1, ""),
-      });
-      reset();
-      handleClose();
-    },
-    onError: (error) => {
-      console.error("Błąd podczas edytowania placówki:", error);
-    },
-  });
+  // const mutationUpdate = useMutation({
+  //   mutationFn: updatePlace,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({
+  //       queryKey: queryKeys.placesPage.placesList(1, ""),
+  //     });
+  //     reset();
+  //     handleClose();
+  //   },
+  //   onError: (error) => {
+  //     console.error("Błąd podczas edytowania placówki:", error);
+  //   },
+  // });
 
-  const onSubmit = (data: Place) => {
-    if (placeToEdit) {
-      mutationUpdate.mutate({ ...data, _id: placeToEdit._id });
-    } else {
-      mutationAdd.mutate(data);
-    }
+  const onSubmit = (data: Audycja) => {
+    // if (audycjaToEdit) {
+    //   mutationUpdate.mutate({ ...data, _id: audycjaToEdit._id });
+    // } else {
+    mutationAdd.mutate(data);
+    // }
   };
   const onSaveClick = () => {
     handleSubmit(onSubmit)();
@@ -81,18 +75,17 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>
-        {" "}
-        {placeToEdit ? "Edytuj placówkę" : "Dodaj placówkę"}
+        {audycjaToEdit ? "Edytuj audycję" : "Dodaj audycję"}
       </DialogTitle>
       <DialogContent>
         <Controller
-          name="name"
+          name="place"
           control={control}
           rules={{ required: "To pole jest wymagane" }}
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              label="Nazwa placówki*"
+              label="Placówka*"
               fullWidth
               margin="dense"
               error={!!fieldState.error}
@@ -102,52 +95,24 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
         />
         <div className="add-or-edit-row">
           <Controller
-            name="address"
+            name="startDate"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Adres"
+                label="Data od*"
                 className="w-50"
                 margin="dense"
               />
             )}
           />
-
           <Controller
-            name="phone"
+            name="endDate"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Telefon"
-                className="w-50"
-                margin="dense"
-              />
-            )}
-          />
-        </div>
-        <div className="add-or-edit-row">
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Email"
-                className="w-50"
-                margin="dense"
-              />
-            )}
-          />
-
-          <Controller
-            name="invoiceEmail"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Email do faktur"
+                label="Data do*"
                 className="w-50"
                 margin="dense"
               />
@@ -156,78 +121,65 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
         </div>
         <div className="add-or-edit-row">
           <Controller
-            name="contactPerson"
+            name="leader"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Osoba kontaktowa"
+                label="Prowadzący"
                 className="w-50"
                 margin="dense"
               />
             )}
           />
           <Controller
-            name="locationTypeId"
+            name="musician"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Muzyk"
+                className="w-50"
+                margin="dense"
+              />
+            )}
+          />
+        </div>
+        <div className="add-or-edit-row">
+          <Controller
+            name="status"
             control={control}
             rules={{ required: "To pole jest wymagane" }}
-            render={({ field, fieldState }) => (
-              <FormControl
-                error={!!fieldState.error}
-                className="w-50"
-                margin="dense"
-              >
-                <InputLabel id="demo-simple-select-label">
-                  Lokalizacja*
-                </InputLabel>
-                <Select
-                  label="Lokalizacja*"
-                  labelId="locationTypeLabelId"
-                  id="locationType"
-                  {...field}
-                >
-                  {Object.entries(LocationTypeMap).map(([key, value]) => (
-                    <MenuItem key={value} value={value}>
-                      {LocationTypeLabels[key as keyof typeof LocationTypeMap]}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {fieldState.error && (
-                  <p
-                    style={{
-                      color: "#d32f2f",
-                      fontSize: "0.8rem",
-                      margin: "3px 14px 0",
-                    }}
-                  >
-                    {fieldState.error.message}
-                  </p>
-                )}
-              </FormControl>
-            )}
-          />
-        </div>
-        <div className="add-or-edit-row">
-          <Controller
-            name="nip"
-            control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                label="NIP"
+                label="Status*"
                 className="w-50"
                 margin="dense"
               />
             )}
           />
-
           <Controller
-            name="regon"
+            name="price"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                label="REGON"
+                label="Cena"
+                className="w-50"
+                margin="dense"
+              />
+            )}
+          />
+        </div>
+        <div className="add-or-edit-row">
+          <Controller
+            name="paymentMethod"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Metoda płatności"
                 className="w-50"
                 margin="dense"
               />
@@ -240,7 +192,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
           render={({ field }) => (
             <TextField
               {...field}
-              label="Opis"
+              label="Komentarz"
               multiline
               rows={3}
               fullWidth
@@ -258,11 +210,11 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
           onClick={onSaveClick}
           disabled={mutationAdd.isPending}
         >
-          {placeToEdit ? "Zapisz" : "Dodaj"}
+          {audycjaToEdit ? "Zapisz" : "Dodaj"}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default AddOrEditPlaceModal;
+export default AddOrEditAudycjaModal;

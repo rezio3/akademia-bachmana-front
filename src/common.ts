@@ -57,3 +57,36 @@ export const getPersonTypeLabelById = (
   const key = entry[0] as keyof typeof PersonTypeMap;
   return PersonTypeLabels[key];
 };
+
+// Audycja Statuses
+// vvvvvvvvvvvvvvvvvvvvvvvvv
+
+export const AudycjaStatusMap = {
+  Aktywna: 1,
+  Niepewna: 2,
+  Anulowana: 3,
+} as const;
+
+export type AudycjaStatus =
+  (typeof AudycjaStatusMap)[keyof typeof AudycjaStatusMap];
+
+export const AudycjaStatusLabels: Record<
+  keyof typeof AudycjaStatusMap,
+  string
+> = {
+  Aktywna: "Aktywna",
+  Niepewna: "Niepewna",
+  Anulowana: "Anulowana",
+};
+
+export const getAudycjaStatusLabelById = (
+  id: AudycjaStatus | number
+): string | undefined => {
+  const entry = Object.entries(AudycjaStatusMap).find(
+    ([, value]) => value === id
+  );
+  if (!entry) return undefined;
+
+  const key = entry[0] as keyof typeof AudycjaStatusMap;
+  return AudycjaStatusLabels[key];
+};

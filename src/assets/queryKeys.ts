@@ -15,4 +15,7 @@ export const queryKeys = {
       filter,
     ],
   },
+  audycjePage: {
+    audycjeList: () => ["audycje", "list"],
+  },
 };

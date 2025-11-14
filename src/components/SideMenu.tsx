@@ -32,7 +32,7 @@ const SideMenu = () => {
     {
       text: "Audycje",
       icon: <MusicNoteIcon fontSize="small" />,
-      path: "/admin/audycje",
+      path: urlRoutes.audycje,
     },
     {
       text: "Placówki",
@@ -42,7 +42,7 @@ const SideMenu = () => {
     {
       text: "Prowadzący i muzycy",
       icon: <PersonIcon fontSize="small" />,
-      path: "/admin/prowadzacy",
+      path: urlRoutes.persons,
     },
   ];
   return (

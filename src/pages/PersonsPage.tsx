@@ -1,18 +1,22 @@
 import { useState } from "react";
 import PageTitle from "../components/elements/PageTitle";
-import Actions from "../components/persons/Actions";
+import Actions from "../components/elements/Actions";
 import PersonsList from "../components/persons/PersonsList";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../assets/queryKeys";
-import { getPersonsList } from "../components/persons/persons";
+import {
+  getPersonsList,
+  type PersonsResponse,
+} from "../components/persons/persons";
 import Skeleton from "../components/elements/Skeleton";
 import SearchBar from "../components/elements/SearchBar";
+import AddOrEditPersonModal from "../components/persons/AddOrEditPersonModal";
 
 const PersonsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [debouncedFilter, setDebouncedFilter] = useState("");
   const personsLimitInOnePage = 10;
-  const { data, isLoading, isError } = useQuery<any>({
+  const { data, isLoading, isError } = useQuery<PersonsResponse>({
     queryKey: queryKeys.personsPage.personsList(currentPage, debouncedFilter),
     queryFn: () =>
       getPersonsList(currentPage, personsLimitInOnePage, debouncedFilter),
@@ -28,7 +32,10 @@ const PersonsPage = () => {
   return (
     <>
       <PageTitle>Prowadzący i muzycy</PageTitle>
-      <Actions />
+      <Actions
+        label="Dodaj osobę"
+        modal={(props) => <AddOrEditPersonModal {...props} />}
+      />
       <SearchBar onSearch={handleSearch} />
       {isLoading ? (
         <Skeleton count={5} height={70} className="mt-2" />

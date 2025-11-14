@@ -20,7 +20,7 @@ const LocationButtons: React.FC<LocationButtonsProps> = ({
   const CardWrapper: React.ElementType = CardActionArea;
   const locationList: LocationType[] = Object.values(LocationTypeMap);
   return (
-    <div className="d-flex gap-2">
+    <div className="d-flex gap-2 mt-3">
       {locationList.map((locationId, index) => {
         const isActive = activeLocation === locationId;
 
