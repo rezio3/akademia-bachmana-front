@@ -4,20 +4,16 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import "../elements/AddOrEditModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPerson, updatePerson, type Person } from "./persons";
 import { Controller, useForm } from "react-hook-form";
-import { PersonTypeLabels, PersonTypeMap } from "../../common";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
 import SelectLocation from "../Selects/SelectLocation";
+import SelectPersonType from "../Selects/SelectPersonType";
 
 type AddOrEditPersonModalProps = {
   handleClose: () => void;
@@ -133,36 +129,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
             control={control}
             rules={{ required: "To pole jest wymagane" }}
             render={({ field, fieldState }) => (
-              <FormControl
-                error={!!fieldState.error}
-                className="w-50"
-                margin="dense"
-              >
-                <InputLabel id="demo-simple-select-label">Typ*</InputLabel>
-                <Select
-                  label="Typ*"
-                  labelId="personTypeLabelId"
-                  id="personType"
-                  {...field}
-                >
-                  {Object.entries(PersonTypeMap).map(([key, value]) => (
-                    <MenuItem key={value} value={value}>
-                      {PersonTypeLabels[key as keyof typeof PersonTypeMap]}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {fieldState.error && (
-                  <p
-                    style={{
-                      color: "#d32f2f",
-                      fontSize: "0.8rem",
-                      margin: "3px 14px 0",
-                    }}
-                  >
-                    {fieldState.error.message}
-                  </p>
-                )}
-              </FormControl>
+              <SelectPersonType field={field} fieldState={fieldState} />
             )}
           />
           <Controller
