@@ -15,7 +15,7 @@ export type LocationType =
 
 export const LocationTypeLabels: Record<keyof typeof LocationTypeMap, string> =
   {
-    Lubelskie: "Lubelskie",
+    Lubelskie: "Lubuskie",
     Mazowieckie: "Mazowieckie",
     Lodzkie: "Łódzkie",
     KujawskoPomorskie: "Kujawsko-Pomorskie",
