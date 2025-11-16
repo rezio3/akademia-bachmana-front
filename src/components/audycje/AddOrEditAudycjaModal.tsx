@@ -103,6 +103,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
           render={({ field, fieldState }) => (
             <DatePicker
               className="w-100 mb-3"
+              format="DD/MM/YYYY"
               label="Data*"
               {...field}
               value={field.value ? dayjs(field.value) : null}
@@ -124,6 +125,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             rules={{ required: "To pole jest wymagane" }}
             render={({ field, fieldState }) => (
               <TimePicker
+                ampm={false}
                 label="Godzina od*"
                 {...field}
                 value={field.value ? dayjs(field.value) : null}
@@ -144,6 +146,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             rules={{ required: "To pole jest wymagane" }}
             render={({ field, fieldState }) => (
               <TimePicker
+                ampm={false}
                 label="Godzina do*"
                 {...field}
                 value={field.value ? dayjs(field.value) : null}

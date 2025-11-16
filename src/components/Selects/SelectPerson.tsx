@@ -1,4 +1,4 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import type { ControllerRenderProps } from "react-hook-form";
 
@@ -10,6 +10,7 @@ import {
   type PersonsResponse,
 } from "../persons/persons";
 import { getLocationLabelById, getPersonTypeLabelById } from "../../common";
+import HeaderText from "../elements/HeaderText";
 
 type SelectPerson = {
   field: ControllerRenderProps<any, any>;
@@ -52,12 +53,25 @@ const SelectPerson: React.FC<SelectPerson> = ({
       options={persons}
       loading={isLoading}
       sx={{ width: 300 }}
-      getOptionLabel={(option) => {
-        const label = `${option.name} (${
-          isMusician ? "" : getPersonTypeLabelById(option.personType) + ` - `
-        }${getLocationLabelById(option.location)})`;
-        return label;
-      }}
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option) => (
+        <Box component="li" {...props}>
+          <Box>
+            <span>{option.name}</span>
+            <br />
+            <HeaderText
+              headerType="h6"
+              fontSize={12}
+              className="text0secondary"
+            >
+              {isMusician
+                ? ""
+                : `${getPersonTypeLabelById(option.personType)} - `}
+              {getLocationLabelById(option.location)}
+            </HeaderText>
+          </Box>
+        </Box>
+      )}
       filterOptions={(x) => x}
       isOptionEqualToValue={(opt, val) => opt._id === val._id}
       renderInput={(params) => <TextField {...params} label={inputLabel} />}

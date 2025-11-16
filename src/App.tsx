@@ -15,6 +15,8 @@ import PersonsPage from "./pages/PersonsPage";
 import { NotificationProvider } from "./assets/NotificationProvider";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import "dayjs/locale/pl";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +26,7 @@ const queryClient = new QueryClient({
     },
   },
 });
-
+dayjs.locale("pl");
 function App() {
   return (
     <div className="app">
@@ -33,7 +35,10 @@ function App() {
           <BrowserRouter>
             <AuthProvider>
               <NotificationProvider>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale="pl"
+                >
                   <Routes>
                     <Route path={urlRoutes.loginPage} element={<LoginPage />} />
                     <Route
