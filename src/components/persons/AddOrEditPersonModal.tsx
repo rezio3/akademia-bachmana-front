@@ -41,7 +41,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
     mutationFn: addPerson,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.personsPage.personsList(1, ""),
+        queryKey: queryKeys.personsPage.personsListBase(),
       });
       showNotification("success", "Dodano osobę.");
       reset();
@@ -56,7 +56,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
     mutationFn: updatePerson,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.personsPage.personsList(1, ""),
+        queryKey: queryKeys.personsPage.personsListBase(),
       });
       showNotification("success", "Zaktualizowano osobę.");
       reset();

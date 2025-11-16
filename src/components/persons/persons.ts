@@ -1,14 +1,13 @@
 import { baseUrl } from "../../assets/baseUrl";
 import { type LocationType, type Nil, type PersonType } from "../../common";
 export const getPersonsList = async (
-  page = 1,
-  limit = 10,
+  page?: number,
+  limit?: number,
   filter = ""
 ): Promise<PersonsResponse> => {
-  const query = new URLSearchParams({
-    page: page.toString(),
-    limit: limit.toString(),
-  });
+  const query = new URLSearchParams();
+  if (page !== undefined) query.append("page", page.toString());
+  if (limit !== undefined) query.append("limit", limit.toString());
   if (filter?.trim()) query.append("search", filter);
   const res = await fetch(`${baseUrl}api/persons?${query.toString()}`);
   if (!res.ok) throw new Error("Błąd podczas pobierania listy osób.");

@@ -28,7 +28,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
     mutationFn: (_id: string) => deletePerson(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.personsPage.personsList(1, ""),
+        queryKey: queryKeys.personsPage.personsListBase(),
       });
       showNotification("success", "Usunięto osobę.");
     },
