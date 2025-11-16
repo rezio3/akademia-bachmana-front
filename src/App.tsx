@@ -12,6 +12,9 @@ import DashboardPage from "./pages/DashboardPage";
 import PlacesPage from "./pages/PlacesPage";
 import AudycjePage from "./pages/AudycjePage";
 import PersonsPage from "./pages/PersonsPage";
+import { NotificationProvider } from "./assets/NotificationProvider";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,23 +32,27 @@ function App() {
         <ThemeProvider theme={theme}>
           <BrowserRouter>
             <AuthProvider>
-              <Routes>
-                <Route path={urlRoutes.loginPage} element={<LoginPage />} />
-                <Route
-                  path={urlRoutes.dashboard}
-                  element={
-                    <ProtectedRoute>
-                      <AdminPage />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route index element={<DashboardPage />} />
-                  <Route path="audycje" element={<AudycjePage />} />
-                  <Route path="places" element={<PlacesPage />} />
-                  <Route path="persons" element={<PersonsPage />} />
-                  {/* <Route path="mapy" element={<MapyPage />} /> */}
-                </Route>
-              </Routes>
+              <NotificationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Routes>
+                    <Route path={urlRoutes.loginPage} element={<LoginPage />} />
+                    <Route
+                      path={urlRoutes.dashboard}
+                      element={
+                        <ProtectedRoute>
+                          <AdminPage />
+                        </ProtectedRoute>
+                      }
+                    >
+                      <Route index element={<DashboardPage />} />
+                      <Route path="audycje" element={<AudycjePage />} />
+                      <Route path="places" element={<PlacesPage />} />
+                      <Route path="persons" element={<PersonsPage />} />
+                      {/* <Route path="mapy" element={<MapyPage />} /> */}
+                    </Route>
+                  </Routes>
+                </LocalizationProvider>
+              </NotificationProvider>
             </AuthProvider>
           </BrowserRouter>
         </ThemeProvider>

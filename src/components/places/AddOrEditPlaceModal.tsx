@@ -14,6 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
 import SelectLocation from "../Selects/SelectLocation";
+import { useNotification } from "../../assets/NotificationProvider";
 
 type AddOrEditPlaceModalProps = {
   handleClose: () => void;
@@ -27,6 +28,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
   placeToEdit,
 }) => {
   const queryClient = useQueryClient();
+  const { showNotification } = useNotification();
 
   const { control, handleSubmit, reset } = useForm<Place>();
 
@@ -40,12 +42,15 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
     mutationFn: addPlace,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placesPage.placesList(1, ""),
+        queryKey: queryKeys.placesPage.placesListBase(),
+        exact: false,
       });
+      showNotification("success", "Dodano placówkę.");
       reset();
       handleClose();
     },
     onError: (error) => {
+      showNotification("error", "Błąd podczas dodawania placówki.");
       console.error("Błąd podczas dodawania placówki:", error);
     },
   });
@@ -53,12 +58,15 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
     mutationFn: updatePlace,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placesPage.placesList(1, ""),
+        queryKey: queryKeys.placesPage.placesListBase(),
+        exact: false,
       });
+      showNotification("success", "Zaktualizowano placówkę.");
       reset();
       handleClose();
     },
     onError: (error) => {
+      showNotification("error", "Błąd podczas edytowania placówki.");
       console.error("Błąd podczas edytowania placówki:", error);
     },
   });
@@ -77,7 +85,6 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>
-        {" "}
         {placeToEdit ? "Edytuj placówkę" : "Dodaj placówkę"}
       </DialogTitle>
       <DialogContent>
@@ -117,6 +124,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
               <TextField
                 {...field}
                 label="Telefon"
+                type="number"
                 className="w-50"
                 margin="dense"
               />

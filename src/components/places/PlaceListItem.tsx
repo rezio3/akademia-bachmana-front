@@ -10,12 +10,14 @@ import { useState } from "react";
 import ConfirmModal from "../elements/ConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../assets/queryKeys";
+import { useNotification } from "../../assets/NotificationProvider";
 
 type PlaceListItemProps = {
   place: Place;
 };
 
 const PlaceListItem: React.FC<PlaceListItemProps> = ({ place }) => {
+  const { showNotification } = useNotification();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
   const queryClient = useQueryClient();
@@ -24,10 +26,13 @@ const PlaceListItem: React.FC<PlaceListItemProps> = ({ place }) => {
     mutationFn: (_id: string) => deletePlace(_id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.placesPage.placesList(1, ""),
+        queryKey: queryKeys.placesPage.placesListBase(),
+        exact: false,
       });
+      showNotification("success", "Usunięto placówkę.");
     },
     onError: (error) => {
+      showNotification("error", "Błąd podczas usuwania placówki.");
       console.error("Błąd podczas usuwania placówki:", error);
     },
   });

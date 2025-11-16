@@ -2,15 +2,17 @@ import { baseUrl } from "../../assets/baseUrl";
 import type { LocationType, Nil } from "../../common";
 
 export const getPlacesList = async (
-  page = 1,
-  limit = 10,
-  filter = ""
+  page?: number,
+  limit?: number,
+  filter?: string
 ): Promise<PlacesResponse> => {
-  const query = new URLSearchParams({
-    page: page.toString(),
-    limit: limit.toString(),
-  });
+  const query = new URLSearchParams();
+
+  if (page !== undefined) query.append("page", page.toString());
+  if (limit !== undefined) query.append("limit", limit.toString());
+
   if (filter?.trim()) query.append("search", filter);
+
   const res = await fetch(`${baseUrl}api/places?${query.toString()}`);
   if (!res.ok) throw new Error("Błąd podczas pobierania listy placówek.");
   return res.json();
@@ -68,7 +70,7 @@ export const deletePlace = async (_id: string) => {
 export type Place = {
   _id?: string;
   name: string;
-  phone?: string | Nil;
+  phone?: string | number | Nil;
   email?: string | Nil;
   address?: string | Nil;
   invoiceEmail?: string | Nil;

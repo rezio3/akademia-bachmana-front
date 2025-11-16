@@ -12,12 +12,14 @@ import { deletePerson, type Person } from "./persons";
 
 import PersonIcon from "@mui/icons-material/Person";
 import AddOrEditPersonModal from "./AddOrEditPersonModal";
+import { useNotification } from "../../assets/NotificationProvider";
 
 type PersonListItemProps = {
   person: Person;
 };
 
 const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
+  const { showNotification } = useNotification();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
   const queryClient = useQueryClient();
@@ -28,9 +30,11 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.personsPage.personsList(1, ""),
       });
+      showNotification("success", "Usunięto osobę.");
     },
     onError: (error) => {
       console.error("Błąd podczas usuwania osoby:", error);
+      showNotification("error", "Błąd podczas usuwania osoby.");
     },
   });
 

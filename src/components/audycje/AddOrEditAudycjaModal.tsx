@@ -8,10 +8,16 @@ import {
 } from "@mui/material";
 import "../elements/AddOrEditModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addAudycja, type Audycja } from "./audycje";
+import { addAudycja, type Audycja, type AudycjaForm } from "./audycje";
 import { Controller, useForm } from "react-hook-form";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
+import SelectPlace from "../Selects/SelectPlace";
+import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import SelectPerson from "../Selects/SelectPerson";
+import { useNotification } from "../../assets/NotificationProvider";
+import SelectAudycjaStatus from "../Selects/SelectAudycjaStatus";
 
 type AddOrEditAudycjaModalProps = {
   handleClose: () => void;
@@ -25,8 +31,9 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
   audycjaToEdit,
 }) => {
   const queryClient = useQueryClient();
+  const { showNotification } = useNotification();
 
-  const { control, handleSubmit, reset } = useForm<Audycja>();
+  const { control, handleSubmit, reset } = useForm<AudycjaForm>();
 
   useEffect(() => {
     if (open) {
@@ -40,10 +47,12 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
       queryClient.invalidateQueries({
         queryKey: queryKeys.audycjePage.audycjeList(),
       });
+      showNotification("success", "Dodano audycję.");
       reset();
       handleClose();
     },
     onError: (error) => {
+      showNotification("error", "Błąd podczas dodawania audycji.");
       console.error("Błąd podczas dodawania audycji:", error);
     },
   });
@@ -61,11 +70,12 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
   //   },
   // });
 
-  const onSubmit = (data: Audycja) => {
+  const onSubmit = (data: AudycjaForm) => {
     // if (audycjaToEdit) {
     //   mutationUpdate.mutate({ ...data, _id: audycjaToEdit._id });
     // } else {
     mutationAdd.mutate(data);
+    console.log(data);
     // }
   };
   const onSaveClick = () => {
@@ -83,38 +93,68 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
           control={control}
           rules={{ required: "To pole jest wymagane" }}
           render={({ field, fieldState }) => (
-            <TextField
+            <SelectPlace field={field} fieldState={fieldState} />
+          )}
+        />
+        <Controller
+          name="date"
+          control={control}
+          rules={{ required: "To pole jest wymagane" }}
+          render={({ field, fieldState }) => (
+            <DatePicker
+              className="w-100 mb-3"
+              label="Data*"
               {...field}
-              label="Placówka*"
-              fullWidth
-              margin="dense"
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
+              value={field.value ? dayjs(field.value) : null}
+              onChange={(newValue) => field.onChange(newValue?.toDate())}
+              slotProps={{
+                textField: {
+                  error: !!fieldState.error,
+                  helperText: fieldState.error?.message,
+                  fullWidth: true,
+                },
+              }}
             />
           )}
         />
-        <div className="add-or-edit-row">
+        <div className="add-or-edit-row mb-2">
           <Controller
-            name="startDate"
+            name="startTime"
             control={control}
-            render={({ field }) => (
-              <TextField
+            rules={{ required: "To pole jest wymagane" }}
+            render={({ field, fieldState }) => (
+              <TimePicker
+                label="Godzina od*"
                 {...field}
-                label="Data od*"
-                className="w-50"
-                margin="dense"
+                value={field.value ? dayjs(field.value) : null}
+                onChange={(newValue) => field.onChange(newValue?.toDate())}
+                slotProps={{
+                  textField: {
+                    error: !!fieldState.error,
+                    helperText: fieldState.error?.message,
+                    fullWidth: true,
+                  },
+                }}
               />
             )}
           />
           <Controller
-            name="endDate"
+            name="endTime"
             control={control}
-            render={({ field }) => (
-              <TextField
+            rules={{ required: "To pole jest wymagane" }}
+            render={({ field, fieldState }) => (
+              <TimePicker
+                label="Godzina do*"
                 {...field}
-                label="Data do*"
-                className="w-50"
-                margin="dense"
+                value={field.value ? dayjs(field.value) : null}
+                onChange={(newValue) => field.onChange(newValue?.toDate())}
+                slotProps={{
+                  textField: {
+                    error: !!fieldState.error,
+                    helperText: fieldState.error?.message,
+                    fullWidth: true,
+                  },
+                }}
               />
             )}
           />
@@ -124,11 +164,10 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             name="leader"
             control={control}
             render={({ field }) => (
-              <TextField
-                {...field}
-                label="Prowadzący"
-                className="w-50"
-                margin="dense"
+              <SelectPerson
+                field={field}
+                isMusician={false}
+                inputLabel="Prowadzący"
               />
             )}
           />
@@ -136,11 +175,10 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             name="musician"
             control={control}
             render={({ field }) => (
-              <TextField
-                {...field}
-                label="Muzyk"
-                className="w-50"
-                margin="dense"
+              <SelectPerson
+                field={field}
+                isMusician={true}
+                inputLabel="Muzyk"
               />
             )}
           />
@@ -150,13 +188,8 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             name="status"
             control={control}
             rules={{ required: "To pole jest wymagane" }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Status*"
-                className="w-50"
-                margin="dense"
-              />
+            render={({ field, fieldState }) => (
+              <SelectAudycjaStatus field={field} fieldState={fieldState} />
             )}
           />
           <Controller

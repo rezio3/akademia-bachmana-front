@@ -1,6 +1,7 @@
 export const queryKeys = {
   placesPage: {
-    placesList: (page: number, filter: string) => [
+    placesListBase: () => ["places", "list"],
+    placesList: (page?: number, filter?: string) => [
       "places",
       "list",
       page,
@@ -8,7 +9,7 @@ export const queryKeys = {
     ],
   },
   personsPage: {
-    personsList: (page: number, filter: string) => [
+    personsList: (page?: number, filter?: string) => [
       "persons",
       "list",
       page,
@@ -17,5 +18,11 @@ export const queryKeys = {
   },
   audycjePage: {
     audycjeList: () => ["audycje", "list"],
+  },
+  leadersDropdown: {
+    leadersDropdownList: (filter?: string) => ["leaders", "list", filter],
+  },
+  musiciansDropdown: {
+    musiciansDropdownList: (filter?: string) => ["musicians", "list", filter],
   },
 };

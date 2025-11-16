@@ -1,5 +1,5 @@
 import { baseUrl } from "../../assets/baseUrl";
-import type { LocationType, PersonType } from "../../common";
+import { type LocationType, type Nil, type PersonType } from "../../common";
 export const getPersonsList = async (
   page = 1,
   limit = 10,
@@ -68,8 +68,8 @@ export type Person = {
   _id?: string;
   name: string;
   personType: PersonType;
-  phone?: string;
-  email?: string;
+  phone?: string | number | Nil;
+  email?: string | Nil;
   location: LocationType;
   description?: string;
 };
@@ -77,4 +77,30 @@ export type Person = {
 export type PersonsResponse = {
   persons: Person[];
   totalPages: number;
+};
+
+export const getPersonsDropdownList = async (
+  filter = "",
+  isMusician: boolean
+): Promise<PersonsResponse> => {
+  const query = new URLSearchParams();
+
+  if (filter?.trim()) {
+    query.append("search", filter);
+  }
+
+  const queryString = query.toString();
+  const leadersUrl = queryString
+    ? `${baseUrl}api/leaders?${queryString}`
+    : `${baseUrl}api/leaders`;
+
+  const musiciansUrl = queryString
+    ? `${baseUrl}api/musicians?${queryString}`
+    : `${baseUrl}api/musicians`;
+
+  const res = await fetch(isMusician ? musiciansUrl : leadersUrl);
+
+  if (!res.ok) throw new Error("Błąd podczas pobierania listy osób.");
+
+  return res.json();
 };

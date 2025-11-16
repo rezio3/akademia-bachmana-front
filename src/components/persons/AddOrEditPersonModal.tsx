@@ -14,6 +14,7 @@ import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
 import SelectLocation from "../Selects/SelectLocation";
 import SelectPersonType from "../Selects/SelectPersonType";
+import { useNotification } from "../../assets/NotificationProvider";
 
 type AddOrEditPersonModalProps = {
   handleClose: () => void;
@@ -27,7 +28,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
   personToEdit,
 }) => {
   const queryClient = useQueryClient();
-
+  const { showNotification } = useNotification();
   const { control, handleSubmit, reset } = useForm<Person>();
 
   useEffect(() => {
@@ -42,10 +43,12 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
       queryClient.invalidateQueries({
         queryKey: queryKeys.personsPage.personsList(1, ""),
       });
+      showNotification("success", "Dodano osobę.");
       reset();
       handleClose();
     },
     onError: (error) => {
+      showNotification("error", "Błąd podczas dodawania osoby.");
       console.error("Błąd podczas dodawania osoby:", error);
     },
   });
@@ -55,10 +58,12 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
       queryClient.invalidateQueries({
         queryKey: queryKeys.personsPage.personsList(1, ""),
       });
+      showNotification("success", "Zaktualizowano osobę.");
       reset();
       handleClose();
     },
     onError: (error) => {
+      showNotification("error", "Błąd podczas edytowania osoby.");
       console.error("Błąd podczas edytowania osoby:", error);
     },
   });
@@ -76,10 +81,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
 
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
-      <DialogTitle>
-        {" "}
-        {personToEdit ? "Edytuj osobę" : "Dodaj osobę"}
-      </DialogTitle>
+      <DialogTitle>{personToEdit ? "Edytuj osobę" : "Dodaj osobę"}</DialogTitle>
       <DialogContent>
         <Controller
           name="name"
@@ -103,6 +105,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
+                type="number"
                 label="Telefon"
                 className="w-50"
                 margin="dense"
