@@ -45,7 +45,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
     mutationFn: addAudycja,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.audycjePage.audycjeList(),
+        queryKey: queryKeys.audycjePage.audycjeListBase(),
       });
       showNotification("success", "Dodano audycję.");
       reset();
@@ -164,7 +164,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
         </div>
         <div className="add-or-edit-row">
           <Controller
-            name="leader"
+            name="leaderId"
             control={control}
             render={({ field }) => (
               <SelectPerson
@@ -175,7 +175,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             )}
           />
           <Controller
-            name="musician"
+            name="musicianId"
             control={control}
             render={({ field }) => (
               <SelectPerson

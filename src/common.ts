@@ -1,4 +1,5 @@
 export type Nil = undefined | null;
+export type MonthType = { value: number; label: string };
 
 // Location Types
 // vvvvvvvvvvvvvvvvvvvvvvvvv

@@ -4,8 +4,22 @@ import type { AudycjaStatus, LocationType, Nil } from "../../common";
 import type { Place } from "../places/places";
 import type { Person } from "../persons/persons";
 
-export const getAudycjeList = async (): Promise<any> => {
-  const res = await fetch(`${baseUrl}api/audycje`);
+export const getAudycjeList = async (
+  locationId: LocationType,
+  month: number,
+  year: number
+): Promise<any> => {
+  const params = new URLSearchParams();
+  if (locationId !== null) {
+    params.append("location", locationId.toString());
+  }
+  if (month !== null) {
+    params.append("month", month.toString());
+  }
+  if (year !== null) {
+    params.append("year", year.toString());
+  }
+  const res = await fetch(`${baseUrl}api/audycje?${params.toString()}`);
   if (!res.ok) throw new Error("Błąd podczas pobierania listy audycji.");
   return res.json();
 };
@@ -13,11 +27,14 @@ export const getAudycjeList = async (): Promise<any> => {
 export const addAudycja = async (audycja: AudycjaForm) => {
   const startDate = dateRefactor(audycja.date, audycja.startTime);
   const endDate = dateRefactor(audycja.date, audycja.endTime);
-  const { date, startTime, endTime, ...rest } = audycja;
+  const placeId = audycja.place._id;
+
+  const { date, startTime, endTime, place, ...rest } = audycja;
   const payload = {
     ...rest,
     startDate,
     endDate,
+    placeId,
     locationId: audycja.place.locationTypeId,
   };
   const res = await fetch(`${baseUrl}api/audycje`, {
@@ -54,8 +71,8 @@ export type AudycjaForm = {
   date: Dayjs;
   startTime: Dayjs;
   endTime: Dayjs;
-  leader?: Person | Nil;
-  musician?: Person | Nil;
+  leaderId?: Person;
+  musicianId?: Person;
   status: AudycjaStatus;
   price?: number | Nil;
   paymentMethod?: string | Nil;

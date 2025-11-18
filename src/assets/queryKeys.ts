@@ -1,11 +1,13 @@
+import type { LocationType } from "../common";
+
 export const queryKeys = {
   placesPage: {
     placesListBase: () => ["places", "list"],
     placesList: (page?: number, filter?: string) => [
       "places",
       "list",
-      page,
-      filter,
+      page || "",
+      filter || "",
     ],
   },
   personsPage: {
@@ -13,17 +15,26 @@ export const queryKeys = {
     personsList: (page?: number, filter?: string) => [
       "persons",
       "list",
-      page,
-      filter,
+      page || "",
+      filter || "",
     ],
   },
   audycjePage: {
-    audycjeList: () => ["audycje", "list"],
+    audycjeListBase: () => ["audycje", "list"],
+    audycjeList: (
+      activeLocation: LocationType,
+      selectedMonth: number,
+      selectedYear: number
+    ) => ["audycje", "list", activeLocation, selectedMonth, selectedYear],
   },
   leadersDropdown: {
-    leadersDropdownList: (filter?: string) => ["leaders", "list", filter],
+    leadersDropdownList: (filter?: string) => ["leaders", "list", filter || ""],
   },
   musiciansDropdown: {
-    musiciansDropdownList: (filter?: string) => ["musicians", "list", filter],
+    musiciansDropdownList: (filter?: string) => [
+      "musicians",
+      "list",
+      filter || "",
+    ],
   },
 };

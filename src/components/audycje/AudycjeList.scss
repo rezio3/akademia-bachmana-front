@@ -1,0 +1,74 @@
+.audycje-list {
+  width: 100%;
+  .audycje-row {
+    width: 100%;
+    .header-container {
+      border-right: 1px solid rgb(216, 216, 216);
+      width: 80px;
+    }
+
+    .audycje-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden; // To zapobiega scrollowaniu całej przeglądarki
+      max-width: calc(100% - 80px); // Odejmujemy szerokość header-container
+
+      .scroll-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        .arrow-icon {
+          opacity: 0.5;
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &.scroll-arrow-left {
+          left: 10px;
+        }
+
+        &.scroll-arrow-right {
+          right: 10px;
+        }
+      }
+    }
+
+    .audycje-container {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      // Stylowanie scrollbara
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #acd2ac;
+        border-radius: 10px;
+
+        &:hover {
+          background: #94b994;
+        }
+      }
+
+      .audycja-card {
+        height: 330px;
+        width: 250px;
+        min-width: 250px;
+      }
+    }
+  }
+}
