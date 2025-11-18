@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlacesList from "../components/places/PlacesList";
 import { queryKeys } from "../assets/queryKeys";
 import { useQuery } from "@tanstack/react-query";
@@ -12,11 +12,21 @@ import Skeleton from "../components/elements/Skeleton";
 // import Actions from "../components/places/Actions";
 import AddOrEditPlaceModal from "../components/places/AddOrEditPlaceModal";
 import Actions from "../components/elements/Actions";
+import { useSearchParams } from "react-router-dom";
 
 const PlacesPage = () => {
+  const [searchParams] = useSearchParams();
+  const searchFromUrl = searchParams.get("search") || "";
+
   const [currentPage, setCurrentPage] = useState(1);
   const placesLimitInOnePage = 10;
-  const [debouncedFilter, setDebouncedFilter] = useState("");
+  const [debouncedFilter, setDebouncedFilter] = useState(searchFromUrl);
+
+  useEffect(() => {
+    if (searchFromUrl) {
+      setDebouncedFilter(searchFromUrl);
+    }
+  }, [searchFromUrl]);
 
   const { data, isLoading, isError } = useQuery<PlacesResponse>({
     queryKey: queryKeys.placesPage.placesList(currentPage, debouncedFilter),
@@ -37,7 +47,7 @@ const PlacesPage = () => {
         label="Dodaj placówkę"
         modal={(props) => <AddOrEditPlaceModal {...props} />}
       />
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSearch={handleSearch} initialValue={searchFromUrl} />
       {isLoading ? (
         <Skeleton count={5} height={70} className="mt-2" />
       ) : (

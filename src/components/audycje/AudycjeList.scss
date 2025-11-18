@@ -4,28 +4,28 @@
     width: 100%;
     .header-container {
       border-right: 1px solid rgb(216, 216, 216);
-      width: 80px;
+      width: 60px;
     }
 
     .audycje-wrapper {
       flex: 1;
       position: relative;
-      overflow: hidden; // To zapobiega scrollowaniu całej przeglądarki
-      max-width: calc(100% - 80px); // Odejmujemy szerokość header-container
+      overflow: hidden;
+      max-width: calc(100% - 80px);
 
       .scroll-arrow {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         z-index: 10;
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.5);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         .arrow-icon {
-          opacity: 0.5;
+          opacity: 0.8;
         }
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.2);
+          background-color: rgba(255, 255, 255, 0.8);
         }
 
         &.scroll-arrow-left {
@@ -43,7 +43,6 @@
       overflow-x: auto;
       overflow-y: hidden;
 
-      // Stylowanie scrollbara
       &::-webkit-scrollbar {
         height: 8px;
       }

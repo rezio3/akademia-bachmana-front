@@ -8,7 +8,12 @@ import {
 } from "@mui/material";
 import "../elements/AddOrEditModal.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addAudycja, type Audycja, type AudycjaForm } from "./audycje";
+import {
+  addAudycja,
+  updateAudycja,
+  type Audycja,
+  type AudycjaForm,
+} from "./audycje";
 import { Controller, useForm } from "react-hook-form";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
@@ -18,28 +23,41 @@ import dayjs from "dayjs";
 import SelectPerson from "../Selects/SelectPerson";
 import { useNotification } from "../../assets/NotificationProvider";
 import SelectAudycjaStatus from "../Selects/SelectAudycjaStatus";
+import CustomText from "../elements/CustomText";
 
 type AddOrEditAudycjaModalProps = {
   handleClose: () => void;
   open: boolean;
   audycjaToEdit?: Audycja;
+  defaultDate?: Date;
 };
 
 const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
   handleClose,
   open,
   audycjaToEdit,
+  defaultDate,
 }) => {
   const queryClient = useQueryClient();
   const { showNotification } = useNotification();
-
-  const { control, handleSubmit, reset } = useForm<AudycjaForm>();
+  const { control, handleSubmit, reset, watch } = useForm<AudycjaForm>();
 
   useEffect(() => {
     if (open) {
-      reset(audycjaToEdit || {});
+      if (audycjaToEdit) {
+        reset({
+          ...audycjaToEdit,
+          date: dayjs(audycjaToEdit.startDate),
+          startTime: dayjs(audycjaToEdit.startDate),
+          endTime: dayjs(audycjaToEdit.endDate),
+        });
+      } else if (defaultDate) {
+        reset({ date: defaultDate });
+      } else {
+        reset({});
+      }
     }
-  }, [open, audycjaToEdit, reset]);
+  }, [open, audycjaToEdit, defaultDate, reset]);
 
   const mutationAdd = useMutation({
     mutationFn: addAudycja,
@@ -56,38 +74,46 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
       console.error("Błąd podczas dodawania audycji:", error);
     },
   });
-  // const mutationUpdate = useMutation({
-  //   mutationFn: updatePlace,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({
-  //       queryKey: queryKeys.placesPage.placesList(1, ""),
-  //     });
-  //     reset();
-  //     handleClose();
-  //   },
-  //   onError: (error) => {
-  //     console.error("Błąd podczas edytowania placówki:", error);
-  //   },
-  // });
+  const mutationUpdate = useMutation({
+    mutationFn: updateAudycja,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.audycjePage.audycjeListBase(),
+      });
+      showNotification("success", "Edytowano audycję.");
+      reset();
+      handleClose();
+    },
+    onError: (error) => {
+      showNotification("error", "Błąd podczas edytowania audycji.");
+      console.error("Błąd podczas edytowania placówki:", error);
+    },
+  });
 
   const onSubmit = (data: AudycjaForm) => {
-    // if (audycjaToEdit) {
-    //   mutationUpdate.mutate({ ...data, _id: audycjaToEdit._id });
-    // } else {
-    mutationAdd.mutate(data);
-    console.log(data);
-    // }
+    if (audycjaToEdit) {
+      mutationUpdate.mutate({ ...data, _id: audycjaToEdit._id });
+    } else {
+      mutationAdd.mutate(data);
+    }
   };
   const onSaveClick = () => {
     handleSubmit(onSubmit)();
   };
-
+  const date = watch("date");
+  useEffect(() => {
+    console.log(date);
+  }, [date]);
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>
         {audycjaToEdit ? "Edytuj audycję" : "Dodaj audycję"}
       </DialogTitle>
       <DialogContent>
+        <CustomText fontSize={12} fontWeight={500} className="mb-4">
+          *Audycja zostanie dodana do województwa, w którym znajduje się wybrana
+          placówka.
+        </CustomText>
         <Controller
           name="place"
           control={control}
@@ -164,7 +190,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
         </div>
         <div className="add-or-edit-row">
           <Controller
-            name="leaderId"
+            name="leader"
             control={control}
             render={({ field }) => (
               <SelectPerson
@@ -175,7 +201,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
             )}
           />
           <Controller
-            name="musicianId"
+            name="musician"
             control={control}
             render={({ field }) => (
               <SelectPerson

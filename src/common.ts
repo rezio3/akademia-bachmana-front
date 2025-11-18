@@ -5,7 +5,7 @@ export type MonthType = { value: number; label: string };
 // vvvvvvvvvvvvvvvvvvvvvvvvv
 
 export const LocationTypeMap = {
-  Lubelskie: 1,
+  Lubuskie: 1,
   Mazowieckie: 2,
   Lodzkie: 3,
   KujawskoPomorskie: 4,
@@ -16,7 +16,7 @@ export type LocationType =
 
 export const LocationTypeLabels: Record<keyof typeof LocationTypeMap, string> =
   {
-    Lubelskie: "Lubuskie",
+    Lubuskie: "Lubuskie",
     Mazowieckie: "Mazowieckie",
     Lodzkie: "Łódzkie",
     KujawskoPomorskie: "Kujawsko-Pomorskie",
@@ -80,6 +80,12 @@ export const AudycjaStatusLabels: Record<
   Anulowana: "Anulowana",
 };
 
+export const StatusColors: Record<keyof typeof AudycjaStatusMap, string> = {
+  Aktywna: "#BBFFC9DD",
+  Niepewna: "#CDE8FFDD",
+  Anulowana: "#FFB5B5DD",
+};
+
 export const getAudycjaStatusLabelById = (
   id: AudycjaStatus | number
 ): string | undefined => {
@@ -90,4 +96,14 @@ export const getAudycjaStatusLabelById = (
 
   const key = entry[0] as keyof typeof AudycjaStatusMap;
   return AudycjaStatusLabels[key];
+};
+
+export const getAudycjaStatusColor = (id: AudycjaStatus | number): string => {
+  const entry = Object.entries(AudycjaStatusMap).find(
+    ([, value]) => value === id
+  );
+  if (!entry) return "#ffffff"; // domyślny kolor
+
+  const key = entry[0] as keyof typeof AudycjaStatusMap;
+  return StatusColors[key];
 };

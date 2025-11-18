@@ -6,10 +6,11 @@ import React, { useEffect, useState } from "react";
 
 type SearchBarProps = {
   onSearch: any;
+  initialValue: string;
 };
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [localValue, setLocalValue] = useState("");
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, initialValue }) => {
+  const [localValue, setLocalValue] = useState(initialValue);
 
   useEffect(() => {
     const handler = setTimeout(() => {

@@ -1,5 +1,5 @@
 import { CardContent, CardActionArea } from "@mui/material";
-import HeaderText from "../elements/HeaderText";
+import CustomText from "../elements/CustomText";
 
 import type React from "react";
 import {
@@ -37,9 +37,13 @@ const LocationButtons: React.FC<LocationButtonsProps> = ({
             }}
           >
             <CardContent className="d-flex ">
-              <HeaderText fontSize={20}>
+              <CustomText
+                fontSize={20}
+                className="text-center"
+                onClick={() => {}}
+              >
                 {getLocationLabelById(locationId)}
-              </HeaderText>
+              </CustomText>
             </CardContent>
           </CardWrapper>
         );

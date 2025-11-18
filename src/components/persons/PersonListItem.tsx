@@ -1,5 +1,5 @@
 import "./PersonListItem.scss";
-import HeaderText from "../elements/HeaderText";
+import CustomText from "../elements/CustomText";
 import { Button, Divider } from "@mui/material";
 import { getLocationLabelById, getPersonTypeLabelById } from "../../common";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -43,16 +43,16 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       <div className="w-100 d-flex mb-2 align-items-center justify-content-between ">
         <div className="d-flex align-items-end gap-2">
           <PersonIcon />
-          <HeaderText fontSize={18} fontWeight={500}>
+          <CustomText fontSize={18} fontWeight={500}>
             {person.name}
-          </HeaderText>
-          <HeaderText headerType="h5" fontSize={18} fontWeight={600}>
+          </CustomText>
+          <CustomText headerType="h5" fontSize={18} fontWeight={600}>
             - {getPersonTypeLabelById(person.personType)}
-          </HeaderText>
+          </CustomText>
         </div>
-        <HeaderText headerType="h5" fontSize={16} fontWeight={500}>
+        <CustomText headerType="h5" fontSize={16} fontWeight={500}>
           {getLocationLabelById(person.location)}
-        </HeaderText>
+        </CustomText>
       </div>
       <Divider
         sx={{

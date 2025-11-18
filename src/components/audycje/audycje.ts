@@ -28,13 +28,18 @@ export const addAudycja = async (audycja: AudycjaForm) => {
   const startDate = dateRefactor(audycja.date, audycja.startTime);
   const endDate = dateRefactor(audycja.date, audycja.endTime);
   const placeId = audycja.place._id;
+  const leaderId = audycja.leader?._id;
+  const musicianId = audycja.musician?._id;
 
-  const { date, startTime, endTime, place, ...rest } = audycja;
+  const { date, startTime, endTime, place, musician, leader, ...rest } =
+    audycja;
   const payload = {
     ...rest,
     startDate,
     endDate,
     placeId,
+    leaderId,
+    musicianId,
     locationId: audycja.place.locationTypeId,
   };
   const res = await fetch(`${baseUrl}api/audycje`, {
@@ -51,14 +56,67 @@ export const addAudycja = async (audycja: AudycjaForm) => {
   return res.json();
 };
 
+export const updateAudycja = async (audycja: AudycjaForm) => {
+  if (!audycja._id) {
+    throw new Error("Brak ID audycji do edycji");
+  }
+
+  const startDate = dateRefactor(audycja.date, audycja.startTime);
+  const endDate = dateRefactor(audycja.date, audycja.endTime);
+  const placeId = audycja.place._id;
+  const leaderId = audycja.leader?._id;
+  const musicianId = audycja.musician?._id;
+
+  const { date, startTime, endTime, place, musician, leader, ...rest } =
+    audycja;
+  const payload = {
+    ...rest,
+    startDate,
+    endDate,
+    placeId,
+    leaderId,
+    musicianId,
+    locationId: audycja.place.locationTypeId,
+  };
+
+  const res = await fetch(`${baseUrl}api/audycje/${audycja._id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(res.status, errorText);
+    throw new Error("Błąd podczas edycji audycji");
+  }
+
+  return res.json();
+};
+
+export const deleteAudycja = async (id: string) => {
+  const res = await fetch(`${baseUrl}api/audycje/${id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(res.status, errorText);
+    throw new Error("Błąd podczas usuwania audycji");
+  }
+
+  return res.json();
+};
+
 export type Audycja = {
   _id?: string;
-  place: { name: string; _id: string };
+  place: Place;
   locationId: LocationType;
   startDate: Date;
   endDate: Date;
-  leader?: { name: string; _id: string } | Nil;
-  musician?: { name: string; _id: string } | Nil;
+  leader?: Person | Nil;
+  musician?: Person | Nil;
   status: AudycjaStatus;
   price?: number | Nil;
   paymentMethod?: string | Nil;
@@ -71,8 +129,8 @@ export type AudycjaForm = {
   date: Dayjs;
   startTime: Dayjs;
   endTime: Dayjs;
-  leaderId?: Person;
-  musicianId?: Person;
+  leader?: Person | Nil;
+  musician?: Person | Nil;
   status: AudycjaStatus;
   price?: number | Nil;
   paymentMethod?: string | Nil;

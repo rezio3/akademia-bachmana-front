@@ -1,6 +1,6 @@
 import { deletePlace, type Place } from "./places";
 import "./PlaceListItem.scss";
-import HeaderText from "../elements/HeaderText";
+import CustomText from "../elements/CustomText";
 import { Button, Divider } from "@mui/material";
 import { getLocationLabelById } from "../../common";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -39,12 +39,12 @@ const PlaceListItem: React.FC<PlaceListItemProps> = ({ place }) => {
   return (
     <>
       <div className="w-100 d-flex mb-2 align-items-center justify-content-between">
-        <HeaderText fontSize={18} fontWeight={500}>
+        <CustomText fontSize={18} fontWeight={500}>
           {place.name}
-        </HeaderText>
-        <HeaderText headerType="h5" fontSize={16} fontWeight={500}>
+        </CustomText>
+        <CustomText headerType="h5" fontSize={16} fontWeight={500}>
           {getLocationLabelById(place.locationTypeId)}
-        </HeaderText>
+        </CustomText>
       </div>
       <Divider
         sx={{

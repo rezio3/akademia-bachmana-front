@@ -2,7 +2,7 @@ import { Button, TextField, Alert } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SectionWrapper from "../components/elements/SectionWrapper";
-import HeaderText from "../components/elements/HeaderText";
+import CustomText from "../components/elements/CustomText";
 import { useLogin } from "../hooks/useLogin";
 
 const LoginPage = () => {
@@ -31,9 +31,9 @@ const LoginPage = () => {
       className="d-flex align-items-center justify-content-center flex-column gap-3 mt-5"
       style={{ minHeight: "100%" }}
     >
-      <HeaderText fontSize={36} fontWeight={500} className="mb-4">
+      <CustomText fontSize={36} fontWeight={500} className="mb-4">
         Akademia Bachmana
-      </HeaderText>
+      </CustomText>
 
       <div className="d-flex flex-column gap-3" style={{ minWidth: 300 }}>
         <TextField

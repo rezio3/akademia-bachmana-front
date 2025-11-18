@@ -10,7 +10,7 @@ import {
   type PersonsResponse,
 } from "../persons/persons";
 import { getLocationLabelById, getPersonTypeLabelById } from "../../common";
-import HeaderText from "../elements/HeaderText";
+import CustomText from "../elements/CustomText";
 
 type SelectPerson = {
   field: ControllerRenderProps<any, any>;
@@ -59,7 +59,7 @@ const SelectPerson: React.FC<SelectPerson> = ({
           <Box>
             <span>{option.name}</span>
             <br />
-            <HeaderText
+            <CustomText
               headerType="h6"
               fontSize={12}
               className="text0secondary"
@@ -68,7 +68,7 @@ const SelectPerson: React.FC<SelectPerson> = ({
                 ? ""
                 : `${getPersonTypeLabelById(option.personType)} - `}
               {getLocationLabelById(option.location)}
-            </HeaderText>
+            </CustomText>
           </Box>
         </Box>
       )}

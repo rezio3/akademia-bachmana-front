@@ -11,7 +11,7 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
   children,
   className = "",
   style,
-  maxWidth = "90%",
+  maxWidth = "95%",
 }) => {
   return (
     <div
