@@ -105,7 +105,6 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                type="number"
                 label="Telefon"
                 className="w-50"
                 margin="dense"

@@ -1,14 +1,18 @@
-import { Button, Tooltip } from "@mui/material";
+import { Button, CircularProgress, Tooltip } from "@mui/material";
 import { getAudycjaStatusColor, getAudycjaStatusLabelById } from "../../common";
 import CustomText from "../elements/CustomText";
 import ListItemWrapper from "../elements/ListItemWrapper";
-import type { Audycja } from "./audycje";
+import { handlePaymentStatusChange, type Audycja } from "./audycje";
 import LabeledAudycjaInfo from "./LabeledAudycjaInfo";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import { urlRoutes } from "../../routes/urlRoutes";
+import PaidIcon from "@mui/icons-material/Paid";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../assets/queryKeys";
+import { useNotification } from "../../assets/NotificationProvider";
 
 type AudycjaCardProps = {
   audycja: Audycja;
@@ -21,64 +25,116 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+  const { showNotification } = useNotification();
+  const queryClient = useQueryClient();
   const startTime = formatTime(audycja.startDate);
   const endTime = formatTime(audycja.endDate);
   const navigate = useNavigate();
+
+  const { mutate: updatePaymentStatusMutate, isPending } = useMutation({
+    mutationFn: ({
+      audycjaId,
+      newStatus,
+    }: {
+      audycjaId: string;
+      newStatus: boolean;
+    }) => handlePaymentStatusChange(audycjaId, newStatus),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.audycjePage.audycjeListBase(),
+        exact: false,
+      });
+      showNotification("success", "Zaktualizowano status płatności.");
+    },
+    onError: (error) => {
+      showNotification("error", "Błąd podczas zmiany statusu płatności.");
+      console.error("Błąd podczas zmiany statusu płatności:", error);
+    },
+  });
+
+  const handlePaymentToggle = () => {
+    const newStatus = !audycja.isPaid;
+    updatePaymentStatusMutate({ audycjaId: audycja._id!, newStatus });
+  };
+
   return (
     <ListItemWrapper
-      className="ms-4 my-0 audycja-card d-flex flex-column justify-content-between"
+      className="ms-4 my-0 audycja-card d-flex flex-column justify-content-between position-relative"
       key={audycja._id}
       style={{
         backgroundColor: getAudycjaStatusColor(audycja.status),
       }}
     >
-      <div>
-        <div className="d-flex justify-content-between mb-2">
-          <CustomText fontSize={14} headerType="span" fontWeight={600}>
-            {getAudycjaStatusLabelById(audycja.status)}
+      {audycja.place ? (
+        <div>
+          <div className="d-flex justify-content-between mb-2">
+            <CustomText fontSize={14} headerType="span" fontWeight={600}>
+              {getAudycjaStatusLabelById(audycja.status)}
+            </CustomText>
+            <CustomText fontSize={14} headerType="span" fontWeight={600}>
+              {startTime} - {endTime}
+            </CustomText>
+          </div>
+          <CustomText
+            fontSize={12}
+            headerType="p"
+            fontWeight={500}
+            lineHeight="1.2"
+            onClick={() => {
+              navigate(
+                `${urlRoutes.places}?search=${encodeURIComponent(
+                  audycja.place.name
+                )}`
+              );
+            }}
+          >
+            {audycja.place.name}
           </CustomText>
-          <CustomText fontSize={14} headerType="span" fontWeight={600}>
-            {startTime} - {endTime}
-          </CustomText>
+          <div className="mt-2 d-flex flex-column">
+            <LabeledAudycjaInfo label="Tel." value={audycja.place.phone} />
+            <LabeledAudycjaInfo label="Email" value={audycja.place.email} />
+            <LabeledAudycjaInfo
+              label="Os. kontaktowa"
+              value={audycja.place.contactPerson}
+            />
+          </div>
+          <div className="d-flex flex-column mt-3">
+            <LabeledAudycjaInfo
+              label="Prowadzący"
+              value={audycja.leader?.name}
+            />
+            <LabeledAudycjaInfo label="Tel." value={audycja.leader?.phone} />
+            <LabeledAudycjaInfo label="Muzyk" value={audycja.musician?.name} />
+            <LabeledAudycjaInfo label="Tel." value={audycja.musician?.phone} />
+          </div>
+          <div className="d-flex flex-column mt-3">
+            <div>
+              <LabeledAudycjaInfo label="Cena" value={audycja.price} />
+              <PaidIcon
+                className="ms-1"
+                fontSize="small"
+                style={{
+                  cursor: "pointer",
+                  color: `${audycja.isPaid ? "green" : "red"}`,
+                }}
+                onClick={handlePaymentToggle}
+              />
+            </div>
+
+            <LabeledAudycjaInfo
+              label="Płatność"
+              value={audycja.paymentMethod}
+            />
+
+            <LabeledAudycjaInfo
+              label="FV"
+              value={audycja.place.invoiceEmail || audycja.place.email}
+            />
+          </div>
         </div>
-        <CustomText
-          fontSize={12}
-          headerType="p"
-          fontWeight={500}
-          lineHeight="1.2"
-          onClick={() => {
-            navigate(
-              `${urlRoutes.places}?search=${encodeURIComponent(
-                audycja.place.name
-              )}`
-            );
-          }}
-        >
-          {audycja.place.name}
-        </CustomText>
-        <div className="mt-2 d-flex flex-column">
-          <LabeledAudycjaInfo label="Tel." value={audycja.place.phone} />
-          <LabeledAudycjaInfo label="Email" value={audycja.place.email} />
-          <LabeledAudycjaInfo
-            label="Os. kontaktowa"
-            value={audycja.place.contactPerson}
-          />
-        </div>
-        <div className="d-flex flex-column mt-3">
-          <LabeledAudycjaInfo label="Prowadzący" value={audycja.leader?.name} />
-          <LabeledAudycjaInfo label="Tel." value={audycja.leader?.phone} />
-          <LabeledAudycjaInfo label="Muzyk" value={audycja.musician?.name} />
-          <LabeledAudycjaInfo label="Tel." value={audycja.musician?.phone} />
-        </div>
-        <div className="d-flex flex-column mt-3">
-          <LabeledAudycjaInfo label="Cena" value={audycja.price} />
-          <LabeledAudycjaInfo label="Płatność" value={audycja.paymentMethod} />
-          <LabeledAudycjaInfo
-            label="FV"
-            value={audycja.place.invoiceEmail || audycja.place.email}
-          />
-        </div>
-      </div>
+      ) : (
+        <span>Wystąpił błąd - brak placówki.</span>
+      )}
       <div className="d-flex justify-content-between">
         <div>
           <CustomText headerType="span" fontSize={12}>
@@ -119,6 +175,19 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
           </Tooltip>
         </div>
       </div>
+      {isPending && (
+        <div
+          className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+          style={{
+            background: "rgba(255, 255, 255, 0.6)",
+            backdropFilter: "blur(2px)",
+            zIndex: 10,
+            borderRadius: "12px",
+          }}
+        >
+          <CircularProgress size={32} />
+        </div>
+      )}
     </ListItemWrapper>
   );
 };

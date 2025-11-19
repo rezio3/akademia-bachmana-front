@@ -124,7 +124,6 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
               <TextField
                 {...field}
                 label="Telefon"
-                type="number"
                 className="w-50"
                 margin="dense"
               />
@@ -176,7 +175,11 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
             control={control}
             rules={{ required: "To pole jest wymagane" }}
             render={({ field, fieldState }) => (
-              <SelectLocation field={field} fieldState={fieldState} />
+              <SelectLocation
+                field={field}
+                fieldState={fieldState}
+                disabled={!!placeToEdit}
+              />
             )}
           />
         </div>

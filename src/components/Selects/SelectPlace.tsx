@@ -1,4 +1,4 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import type { ControllerRenderProps, FieldError } from "react-hook-form";
 import {
@@ -8,6 +8,8 @@ import {
 } from "../places/places";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect, useState } from "react";
+import CustomText from "../elements/CustomText";
+import { getLocationLabelById } from "../../common";
 
 type SelectPlaceProps = {
   field: ControllerRenderProps<any, any>;
@@ -44,6 +46,21 @@ const SelectPlace: React.FC<SelectPlaceProps> = ({ field, fieldState }) => {
       loading={isLoading}
       sx={{ width: 300 }}
       getOptionLabel={(option) => option.name}
+      renderOption={(props, option) => (
+        <Box component="li" {...props}>
+          <Box>
+            <span>{option.name}</span>
+            <br />
+            <CustomText
+              headerType="h6"
+              fontSize={12}
+              className="text-secondary"
+            >
+              {getLocationLabelById(option.locationTypeId)}
+            </CustomText>
+          </Box>
+        </Box>
+      )}
       filterOptions={(x) => x}
       isOptionEqualToValue={(opt, val) => opt._id === val._id}
       renderInput={(params) => (

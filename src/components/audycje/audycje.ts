@@ -109,6 +109,27 @@ export const deleteAudycja = async (id: string) => {
   return res.json();
 };
 
+export const handlePaymentStatusChange = async (
+  audycjaId: string,
+  newStatus: boolean
+) => {
+  const res = await fetch(`${baseUrl}api/audycje/${audycjaId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ isPaid: newStatus }),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(res.status, errorText);
+    throw new Error("Błąd podczas aktualizacji statusu płatności");
+  }
+
+  return res.json();
+};
+
 export type Audycja = {
   _id?: string;
   place: Place;
@@ -121,6 +142,7 @@ export type Audycja = {
   price?: number | Nil;
   paymentMethod?: string | Nil;
   description?: string | Nil;
+  isPaid: boolean;
 };
 export type AudycjaForm = {
   _id?: string;

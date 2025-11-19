@@ -3,7 +3,7 @@ import "./ListItemWrapper.scss";
 type ListItemWrapperProps = {
   children: React.ReactNode;
   className?: string;
-  style: any;
+  style?: any;
 };
 const ListItemWrapper: React.FC<ListItemWrapperProps> = ({
   children,

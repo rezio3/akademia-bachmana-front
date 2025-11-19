@@ -11,7 +11,7 @@ export const queryKeys = {
     ],
   },
   personsPage: {
-    personsListBase: () => ["places", "list"],
+    personsListBase: () => ["persons", "list"],
     personsList: (page?: number, filter?: string) => [
       "persons",
       "list",

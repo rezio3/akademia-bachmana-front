@@ -67,7 +67,7 @@ export type Person = {
   _id?: string;
   name: string;
   personType: PersonType;
-  phone?: string | number | Nil;
+  phone?: string | Nil;
   email?: string | Nil;
   location: LocationType;
   description?: string;

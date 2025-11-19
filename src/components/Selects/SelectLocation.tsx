@@ -5,11 +5,13 @@ import { LocationTypeMap, LocationTypeLabels } from "../../common";
 type SelectLocationProps = {
   field: ControllerRenderProps<any, any>;
   fieldState: { error?: FieldError | undefined };
+  disabled?: boolean;
 };
 
 const SelectLocation: React.FC<SelectLocationProps> = ({
   field,
   fieldState,
+  disabled,
 }) => {
   return (
     <FormControl error={!!fieldState.error} className="w-50" margin="dense">
@@ -18,6 +20,7 @@ const SelectLocation: React.FC<SelectLocationProps> = ({
         label="Lokalizacja*"
         labelId="locationTypeLabelId"
         id="locationType"
+        disabled={disabled || false}
         {...field}
       >
         {Object.entries(LocationTypeMap).map(([key, value]) => (

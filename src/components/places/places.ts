@@ -70,7 +70,7 @@ export const deletePlace = async (_id: string) => {
 export type Place = {
   _id?: string;
   name: string;
-  phone?: string | number | Nil;
+  phone?: string | Nil;
   email?: string | Nil;
   address?: string | Nil;
   invoiceEmail?: string | Nil;
