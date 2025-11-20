@@ -13,17 +13,22 @@ import PaidIcon from "@mui/icons-material/Paid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../assets/queryKeys";
 import { useNotification } from "../../assets/NotificationProvider";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+// import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+// import NavigationIcon from "@mui/icons-material/Navigation";
 
 type AudycjaCardProps = {
   audycja: Audycja;
   onEditClick: (audycja: Audycja) => void;
   onDeleteClick: (audycjaId: string) => void;
+  index: number;
 };
 
 const AudycjaCard: React.FC<AudycjaCardProps> = ({
   audycja,
   onEditClick,
   onDeleteClick,
+  // index,
 }) => {
   const { showNotification } = useNotification();
   const queryClient = useQueryClient();
@@ -135,6 +140,33 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
       ) : (
         <span>Wystąpił błąd - brak placówki.</span>
       )}
+      {/* VVVVVVVVVVV TRAVEL TIME ARROW VVVVVVVVVVV */}
+      {/* {index !== 0 && (
+        <div className="position-relative">
+          <NavigationIcon
+            className="position-absolute"
+            style={{
+              rotate: "90deg",
+              left: -75,
+              top: -120,
+              fontSize: 90,
+              color: "rgba(128, 128, 128, 0.5)",
+            }}
+          />
+          <CustomText
+            className="position-absolute"
+            style={{
+              left: -47,
+              top: -83,
+            }}
+            fontSize={10}
+            fontWeight={600}
+          >
+            20 min
+          </CustomText>
+        </div>
+      )} */}
+
       <div className="d-flex justify-content-between">
         <div>
           <CustomText headerType="span" fontSize={12}>
@@ -145,6 +177,20 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
           </Tooltip>
         </div>
         <div className="d-flex gap-1">
+          <Tooltip title="Wyślij przypomnienie">
+            <Button
+              variant="contained"
+              size="small"
+              color="success"
+              sx={{
+                minWidth: "unset",
+                padding: "4px",
+              }}
+              onClick={() => {}}
+            >
+              <NotificationsActiveIcon fontSize="small" />
+            </Button>
+          </Tooltip>
           <Tooltip title="Edytuj">
             <Button
               variant="contained"
@@ -175,6 +221,7 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
           </Tooltip>
         </div>
       </div>
+
       {isPending && (
         <div
           className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"

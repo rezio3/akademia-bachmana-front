@@ -40,7 +40,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
 }) => {
   const queryClient = useQueryClient();
   const { showNotification } = useNotification();
-  const { control, handleSubmit, reset, watch } = useForm<AudycjaForm>();
+  const { control, handleSubmit, reset } = useForm<AudycjaForm>();
 
   useEffect(() => {
     if (open) {
@@ -86,7 +86,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
     },
     onError: (error) => {
       showNotification("error", "Błąd podczas edytowania audycji.");
-      console.error("Błąd podczas edytowania placówki:", error);
+      console.error("Błąd podczas edytowania zadania:", error);
     },
   });
 
@@ -100,10 +100,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
   const onSaveClick = () => {
     handleSubmit(onSubmit)();
   };
-  const date = watch("date");
-  useEffect(() => {
-    console.log(date);
-  }, [date]);
+
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>

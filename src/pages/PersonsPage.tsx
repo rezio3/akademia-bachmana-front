@@ -46,12 +46,6 @@ const PersonsPage = () => {
               <span className="mt-3 fs-4">
                 Coś poszło nie tak podczas pobierania danych...
               </span>
-              {/* <Notification
-                type="error"
-                alert="Error loading tracks."
-                open={notifyOpen}
-                setOpen={setNotifyOpen}
-              /> */}
             </>
           ) : (
             <PersonsList

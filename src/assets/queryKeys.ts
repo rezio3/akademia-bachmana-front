@@ -37,4 +37,7 @@ export const queryKeys = {
       filter || "",
     ],
   },
+  tasksPage: {
+    tasksList: () => ["tasks", "list"],
+  },
 };

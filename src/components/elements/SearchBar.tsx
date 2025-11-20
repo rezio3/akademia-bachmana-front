@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 type SearchBarProps = {
   onSearch: any;
-  initialValue: string;
+  initialValue?: string;
 };
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, initialValue }) => {

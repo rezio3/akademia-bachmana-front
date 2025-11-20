@@ -226,7 +226,7 @@ const AudycjeRow: React.FC<AudycjeRowProps> = ({
               },
             }}
           >
-            <AddIcon fontSize="small" className="" />
+            <AddIcon fontSize="small" />
           </Button>
         )}
       </div>
@@ -247,12 +247,13 @@ const AudycjeRow: React.FC<AudycjeRowProps> = ({
         >
           {audycje.length > 0 ? (
             <>
-              {audycje.map((audycja) => (
+              {audycje.map((audycja, index) => (
                 <AudycjaCard
                   audycja={audycja}
                   key={audycja._id}
                   onEditClick={onEditClick}
                   onDeleteClick={onDeleteClick}
+                  index={index}
                 />
               ))}
             </>

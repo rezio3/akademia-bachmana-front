@@ -10,6 +10,7 @@ type CustomTextProps = {
   className?: string;
   lineHeight?: string;
   onClick?: () => void;
+  style?: any;
 };
 
 const CustomText: React.FC<CustomTextProps> = ({
@@ -21,6 +22,7 @@ const CustomText: React.FC<CustomTextProps> = ({
   className = "",
   lineHeight = 1.5,
   onClick,
+  style = {},
 }) => {
   const Tag = headerType;
   return (
@@ -33,6 +35,7 @@ const CustomText: React.FC<CustomTextProps> = ({
         letterSpacing,
         lineHeight: lineHeight,
         cursor: onClick ? "pointer" : "default",
+        ...style,
       }}
       onClick={onClick}
     >
