@@ -20,7 +20,7 @@ export type VerifyResponse = {
 export const loginUser = async (
   credentials: LoginCredentials
 ): Promise<LoginResponse> => {
-  const response = await fetch(`${baseUrl}auth/login`, {
+  const response = await fetch(`${baseUrl}api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const verifyToken = async (): Promise<VerifyResponse> => {
     throw new Error("Brak tokena");
   }
 
-  const response = await fetch(`${baseUrl}auth/verify`, {
+  const response = await fetch(`${baseUrl}api/auth/verify`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
