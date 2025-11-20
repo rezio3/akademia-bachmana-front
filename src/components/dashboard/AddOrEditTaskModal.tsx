@@ -145,7 +145,7 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
         <Button
           variant="contained"
           onClick={onSaveClick}
-          disabled={mutationAdd.isPending}
+          disabled={mutationAdd.isPending || mutationUpdate.isPending}
         >
           {taskToEdit ? "Zapisz" : "Dodaj"}
         </Button>

@@ -166,7 +166,7 @@ const AddOrEditPersonModal: React.FC<AddOrEditPersonModalProps> = ({
         <Button
           variant="contained"
           onClick={onSaveClick}
-          disabled={mutationAdd.isPending}
+          disabled={mutationAdd.isPending || mutationUpdate.isPending}
         >
           {personToEdit ? "Zapisz" : "Dodaj"}
         </Button>

@@ -241,7 +241,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
         <Button
           variant="contained"
           onClick={onSaveClick}
-          disabled={mutationAdd.isPending}
+          disabled={mutationAdd.isPending || mutationUpdate.isPending}
         >
           {placeToEdit ? "Zapisz" : "Dodaj"}
         </Button>

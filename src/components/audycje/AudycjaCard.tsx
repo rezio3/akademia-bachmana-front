@@ -27,6 +27,7 @@ type AudycjaCardProps = {
   audycja: Audycja;
   onEditClick?: (audycja: Audycja) => void;
   onDeleteClick?: (audycjaId: string) => void;
+  onReminderClick?: (audycja: Audycja) => void;
   index?: number;
   isDashboardViewCard?: boolean;
 };
@@ -35,6 +36,7 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
   audycja,
   onEditClick,
   onDeleteClick,
+  onReminderClick,
   // index,
   isDashboardViewCard,
 }) => {
@@ -192,7 +194,7 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
           </Tooltip>
         </div>
         <div className="d-flex gap-1">
-          {onEditClick && onDeleteClick && (
+          {onEditClick && onDeleteClick && onReminderClick && (
             <>
               <Tooltip title="Wyślij przypomnienie">
                 <Button
@@ -203,7 +205,7 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
                     minWidth: "unset",
                     padding: "4px",
                   }}
-                  onClick={() => {}}
+                  onClick={() => onReminderClick(audycja)}
                 >
                   <NotificationsActiveIcon fontSize="small" />
                 </Button>

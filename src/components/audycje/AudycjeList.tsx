@@ -13,6 +13,7 @@ import ConfirmModal from "../elements/ConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../assets/queryKeys";
 import { useNotification } from "../../assets/NotificationProvider";
+import ReminderModal from "./ReminderModal";
 
 type AudycjeListProps = {
   audycje: Audycja[];
@@ -30,6 +31,7 @@ const AudycjeList: React.FC<AudycjeListProps> = ({
   const [defaultDate, setDefaultDate] = useState<Date | undefined>();
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
   const [audycjaToDelete, setAudycjaToDelete] = useState<string | undefined>();
+  const [openReminderModal, setOpenReminderModal] = useState<boolean>(false);
 
   const { showNotification } = useNotification();
   const queryClient = useQueryClient();
@@ -49,6 +51,10 @@ const AudycjeList: React.FC<AudycjeListProps> = ({
     setOpenDeleteConfirmModal(false);
     setSelectedAudycja(undefined);
     setDefaultDate(undefined);
+  };
+  const handleReminderClick = (audycja: Audycja) => {
+    setSelectedAudycja(audycja);
+    setOpenReminderModal(true);
   };
 
   const handleDeleteClick = (audycjaId: string) => {
@@ -114,6 +120,7 @@ const AudycjeList: React.FC<AudycjeListProps> = ({
             onEditClick={handleEditClick}
             onAddClick={handleAddClick}
             onDeleteClick={handleDeleteClick}
+            handleReminderClick={handleReminderClick}
           />
         );
       })}
@@ -135,6 +142,11 @@ const AudycjeList: React.FC<AudycjeListProps> = ({
         }}
         description="Czy na pewno chcesz usunąć tę audycję?"
       />
+      <ReminderModal
+        open={openReminderModal}
+        handleClose={() => setOpenReminderModal(false)}
+        audycja={selectedAudycja!}
+      />
     </div>
   );
 };
@@ -148,6 +160,7 @@ type AudycjeRowProps = {
   onEditClick: (audycja: Audycja) => void;
   onAddClick: (date: Date) => void;
   onDeleteClick: (audycjaId: string) => void;
+  handleReminderClick: (audycja: Audycja) => void;
 };
 
 const AudycjeRow: React.FC<AudycjeRowProps> = ({
@@ -159,6 +172,7 @@ const AudycjeRow: React.FC<AudycjeRowProps> = ({
   onEditClick,
   onAddClick,
   onDeleteClick,
+  handleReminderClick,
 }) => {
   const scrollContainerRef = useRef<HTMLUListElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -254,6 +268,7 @@ const AudycjeRow: React.FC<AudycjeRowProps> = ({
                   onEditClick={onEditClick}
                   onDeleteClick={onDeleteClick}
                   index={index}
+                  onReminderClick={handleReminderClick}
                 />
               ))}
             </>

@@ -267,7 +267,7 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
         <Button
           variant="contained"
           onClick={onSaveClick}
-          disabled={mutationAdd.isPending}
+          disabled={mutationAdd.isPending || mutationUpdate.isPending}
         >
           {audycjaToEdit ? "Zapisz" : "Dodaj"}
         </Button>
