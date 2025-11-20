@@ -1,7 +1,5 @@
 import { baseUrl } from "../assets/baseUrl";
 
-const API_URL = "http://localhost:5000/api";
-
 export type LoginCredentials = {
   login: string;
   password: string;
