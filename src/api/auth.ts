@@ -45,7 +45,7 @@ export const verifyToken = async (): Promise<VerifyResponse> => {
     throw new Error("Brak tokena");
   }
 
-  const response = await fetch(`${API_URL}/auth/verify`, {
+  const response = await fetch(`${baseUrl}/auth/verify`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
