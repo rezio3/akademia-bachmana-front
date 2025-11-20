@@ -7,11 +7,9 @@ import { useState } from "react";
 import ConfirmModal from "../elements/ConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../assets/queryKeys";
-// import PersonIcon from "@mui/icons-material/Task";
 import { useNotification } from "../../assets/NotificationProvider";
 import { deleteTask, type Task } from "./tasks";
 import AddOrEditTaskModal from "./AddOrEditTaskModal";
-import ListItemWrapper from "../elements/ListItemWrapper";
 
 type TaskListItemProps = {
   task: Task;
@@ -39,13 +37,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
 
   return (
     <>
-      {/* <ListItemWrapper
-        style={{
-          backgroundColor: getAudycjaStatusColor(audycja.status),
-        }}
-      > */}
       <div className="w-100 d-flex mb-2 align-items-center justify-content-between ">
-        {/* <PersonIcon /> */}
         <CustomText fontSize={18} fontWeight={500}>
           Termin: {task.deadline || "brak"}
         </CustomText>
@@ -94,7 +86,6 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
         }}
         description="Czy na pewno chcesz usunąć to zadanie?"
       />
-      {/* </ListItemWrapper> */}
     </>
   );
 };
