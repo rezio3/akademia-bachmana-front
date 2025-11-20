@@ -1,3 +1,5 @@
+import { baseUrl } from "../assets/baseUrl";
+
 const API_URL = "http://localhost:5000/api";
 
 export type LoginCredentials = {
@@ -20,7 +22,7 @@ export type VerifyResponse = {
 export const loginUser = async (
   credentials: LoginCredentials
 ): Promise<LoginResponse> => {
-  const response = await fetch(`${API_URL}/auth/login`, {
+  const response = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
