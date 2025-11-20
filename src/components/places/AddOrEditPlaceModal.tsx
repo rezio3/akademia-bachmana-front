@@ -20,12 +20,14 @@ type AddOrEditPlaceModalProps = {
   handleClose: () => void;
   open: boolean;
   placeToEdit?: Place;
+  onPlaceAdded?: (place: Place) => void; // Nowy prop
 };
 
 const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
   handleClose,
   open,
   placeToEdit,
+  onPlaceAdded,
 }) => {
   const queryClient = useQueryClient();
   const { showNotification } = useNotification();
@@ -40,12 +42,18 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
 
   const mutationAdd = useMutation({
     mutationFn: addPlace,
-    onSuccess: () => {
+    onSuccess: (newPlace) => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.placesPage.placesListBase(),
         exact: false,
       });
       showNotification("success", "Dodano placówkę.");
+
+      // Jeśli jest callback, wywołaj go z nową placówką
+      if (onPlaceAdded) {
+        onPlaceAdded(newPlace);
+      }
+
       reset();
       handleClose();
     },
@@ -54,6 +62,7 @@ const AddOrEditPlaceModal: React.FC<AddOrEditPlaceModalProps> = ({
       console.error("Błąd podczas dodawania placówki:", error);
     },
   });
+
   const mutationUpdate = useMutation({
     mutationFn: updatePlace,
     onSuccess: () => {

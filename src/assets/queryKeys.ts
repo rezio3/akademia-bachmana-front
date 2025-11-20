@@ -40,4 +40,7 @@ export const queryKeys = {
   tasksPage: {
     tasksList: () => ["tasks", "list"],
   },
+  dashboardPage: {
+    dashboardView: () => ["dashboard", "audycje-view"],
+  },
 };

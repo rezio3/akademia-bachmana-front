@@ -1,5 +1,10 @@
 import { Button, CircularProgress, Tooltip } from "@mui/material";
-import { getAudycjaStatusColor, getAudycjaStatusLabelById } from "../../common";
+import {
+  getAudycjaStatusColor,
+  getAudycjaStatusLabelById,
+  getLocationLabelById,
+  LocationTypeMap,
+} from "../../common";
 import CustomText from "../elements/CustomText";
 import ListItemWrapper from "../elements/ListItemWrapper";
 import { handlePaymentStatusChange, type Audycja } from "./audycje";
@@ -16,12 +21,14 @@ import { useNotification } from "../../assets/NotificationProvider";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 // import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 // import NavigationIcon from "@mui/icons-material/Navigation";
+import CountdownTimer from "../elements/CountdownTimer";
 
 type AudycjaCardProps = {
   audycja: Audycja;
-  onEditClick: (audycja: Audycja) => void;
-  onDeleteClick: (audycjaId: string) => void;
-  index: number;
+  onEditClick?: (audycja: Audycja) => void;
+  onDeleteClick?: (audycjaId: string) => void;
+  index?: number;
+  isDashboardViewCard?: boolean;
 };
 
 const AudycjaCard: React.FC<AudycjaCardProps> = ({
@@ -29,13 +36,13 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
   onEditClick,
   onDeleteClick,
   // index,
+  isDashboardViewCard,
 }) => {
   const { showNotification } = useNotification();
   const queryClient = useQueryClient();
   const startTime = formatTime(audycja.startDate);
   const endTime = formatTime(audycja.endDate);
   const navigate = useNavigate();
-
   const { mutate: updatePaymentStatusMutate, isPending } = useMutation({
     mutationFn: ({
       audycjaId,
@@ -66,16 +73,22 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
     <ListItemWrapper
       className="ms-4 my-0 audycja-card d-flex flex-column justify-content-between position-relative"
       key={audycja._id}
-      style={{
-        backgroundColor: getAudycjaStatusColor(audycja.status),
-      }}
+      style={
+        !isDashboardViewCard && {
+          backgroundColor: getAudycjaStatusColor(audycja.status),
+        }
+      }
     >
       {audycja.place ? (
         <div>
           <div className="d-flex justify-content-between mb-2">
-            <CustomText fontSize={14} headerType="span" fontWeight={600}>
-              {getAudycjaStatusLabelById(audycja.status)}
-            </CustomText>
+            {isDashboardViewCard ? (
+              <CountdownTimer endDate={audycja.endDate} />
+            ) : (
+              <CustomText fontSize={14} headerType="span" fontWeight={600}>
+                {getAudycjaStatusLabelById(audycja.status)}
+              </CustomText>
+            )}
             <CustomText fontSize={14} headerType="span" fontWeight={600}>
               {startTime} - {endTime}
             </CustomText>
@@ -115,15 +128,17 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
           <div className="d-flex flex-column mt-3">
             <div>
               <LabeledAudycjaInfo label="Cena" value={audycja.price} />
-              <PaidIcon
-                className="ms-1"
-                fontSize="small"
-                style={{
-                  cursor: "pointer",
-                  color: `${audycja.isPaid ? "green" : "red"}`,
-                }}
-                onClick={handlePaymentToggle}
-              />
+              {onEditClick && (
+                <PaidIcon
+                  className="ms-1"
+                  fontSize="small"
+                  style={{
+                    cursor: "pointer",
+                    color: `${audycja.isPaid ? "green" : "red"}`,
+                  }}
+                  onClick={handlePaymentToggle}
+                />
+              )}
             </div>
 
             <LabeledAudycjaInfo
@@ -177,48 +192,60 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
           </Tooltip>
         </div>
         <div className="d-flex gap-1">
-          <Tooltip title="Wyślij przypomnienie">
-            <Button
-              variant="contained"
-              size="small"
-              color="success"
-              sx={{
-                minWidth: "unset",
-                padding: "4px",
-              }}
-              onClick={() => {}}
-            >
-              <NotificationsActiveIcon fontSize="small" />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Edytuj">
-            <Button
-              variant="contained"
-              size="small"
-              color="info"
-              sx={{
-                minWidth: "unset",
-                padding: "4px",
-              }}
-              onClick={() => onEditClick(audycja)}
-            >
-              <EditIcon fontSize="small" />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Usuń">
-            <Button
-              variant="contained"
-              size="small"
-              color="error"
-              sx={{
-                minWidth: "unset",
-                padding: "4px",
-              }}
-              onClick={() => onDeleteClick(audycja!._id!)}
-            >
-              <DeleteIcon fontSize="small" />
-            </Button>
-          </Tooltip>
+          {onEditClick && onDeleteClick && (
+            <>
+              <Tooltip title="Wyślij przypomnienie">
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="success"
+                  sx={{
+                    minWidth: "unset",
+                    padding: "4px",
+                  }}
+                  onClick={() => {}}
+                >
+                  <NotificationsActiveIcon fontSize="small" />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Edytuj">
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="info"
+                  sx={{
+                    minWidth: "unset",
+                    padding: "4px",
+                  }}
+                  onClick={() => onEditClick(audycja)}
+                >
+                  <EditIcon fontSize="small" />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Usuń">
+                <Button
+                  variant="contained"
+                  size="small"
+                  color="error"
+                  sx={{
+                    minWidth: "unset",
+                    padding: "4px",
+                  }}
+                  onClick={() => onDeleteClick(audycja!._id!)}
+                >
+                  <DeleteIcon fontSize="small" />
+                </Button>
+              </Tooltip>
+            </>
+          )}
+          {isDashboardViewCard && (
+            <CustomText fontSize={18} fontWeight={700}>
+              {audycja.place.locationTypeId !==
+              LocationTypeMap.KujawskoPomorskie
+                ? getLocationLabelById(audycja.place.locationTypeId)
+                : "Kuj-Pom"}
+            </CustomText>
+          )}
         </div>
       </div>
 

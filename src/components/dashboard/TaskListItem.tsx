@@ -8,8 +8,10 @@ import ConfirmModal from "../elements/ConfirmModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../assets/queryKeys";
 import { useNotification } from "../../assets/NotificationProvider";
-import { deleteTask, type Task } from "./tasks";
+import { deleteTask, toggleTaskCompletion, type Task } from "./tasks";
 import AddOrEditTaskModal from "./AddOrEditTaskModal";
+import DoneIcon from "@mui/icons-material/Done";
+import dayjs from "dayjs";
 
 type TaskListItemProps = {
   task: Task;
@@ -35,11 +37,27 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
     },
   });
 
+  const toggleCompletionMutation = useMutation({
+    mutationFn: (_id: string) => toggleTaskCompletion(_id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.tasksPage.tasksList(),
+      });
+      showNotification("success", "Zmieniono status zadania.");
+    },
+    onError: (error) => {
+      console.error("Błąd podczas zmiany statusu:", error);
+      showNotification("error", "Błąd podczas zmiany statusu zadania.");
+    },
+  });
+
   return (
     <>
       <div className="w-100 d-flex mb-2 align-items-center justify-content-between ">
         <CustomText fontSize={18} fontWeight={500}>
-          Termin: {task.deadline || "brak"}
+          Termin:{" "}
+          {task.deadline ? dayjs(task.deadline).format("DD/MM/YYYY") : "brak"}{" "}
+          {task.completed && "(Zrobione)"}
         </CustomText>
       </div>
       <Divider
@@ -72,6 +90,17 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
           Usuń
           <DeleteIcon fontSize="small" className="ms-1" />
         </Button>
+        {!task.completed && (
+          <Button
+            variant="contained"
+            size="small"
+            color="success"
+            onClick={() => toggleCompletionMutation.mutate(task._id!)}
+          >
+            Zrobione
+            <DoneIcon fontSize="small" className="ms-1" />
+          </Button>
+        )}
       </div>
       <AddOrEditTaskModal
         open={openEdit}

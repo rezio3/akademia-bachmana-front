@@ -159,6 +159,8 @@ export type AudycjaForm = {
   description?: string | Nil;
 };
 
+export type AudycjaResponse = {};
+
 const dateRefactor = (date: Dayjs, time: Dayjs) => {
   return dayjs(date)
     .hour(dayjs(time).hour())

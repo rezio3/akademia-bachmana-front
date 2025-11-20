@@ -37,37 +37,36 @@
         }
       }
     }
+  }
+}
+.audycje-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-    .audycje-container {
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
 
-      &::-webkit-scrollbar {
-        height: 8px;
-      }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 
-      &::-webkit-scrollbar-track {
-        background: transparent;
-        border-radius: 10px;
-        margin-left: 20px;
-        margin-right: 20px;
-      }
+  &::-webkit-scrollbar-thumb {
+    background: #acd2ac;
+    border-radius: 10px;
 
-      &::-webkit-scrollbar-thumb {
-        background: #acd2ac;
-        border-radius: 10px;
-
-        &:hover {
-          background: #94b994;
-        }
-      }
-
-      .audycja-card {
-        height: 330px;
-        width: 250px;
-        min-width: 250px;
-      }
+    &:hover {
+      background: #94b994;
     }
   }
+}
+
+.audycja-card {
+  height: 330px;
+  width: 250px;
+  min-width: 250px;
 }

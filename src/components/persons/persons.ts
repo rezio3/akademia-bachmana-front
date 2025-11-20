@@ -55,9 +55,8 @@ export const deletePerson = async (_id: string) => {
   });
 
   if (!res.ok) {
-    const errorText = await res.text();
-    console.error(res.status, errorText);
-    throw new Error("Błąd podczas usuwania osoby");
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Błąd podczas usuwania osoby");
   }
 
   return res.json();

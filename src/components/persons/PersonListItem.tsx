@@ -32,9 +32,18 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       });
       showNotification("success", "Usunięto osobę.");
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      const errorMessage = error.message || "";
+
+      if (errorMessage.includes("przypisane audycje")) {
+        showNotification(
+          "error",
+          "Nie można usunąć osoby, ponieważ ma przypisane audycje."
+        );
+      } else {
+        showNotification("error", "Błąd podczas usuwania osoby.");
+      }
       console.error("Błąd podczas usuwania osoby:", error);
-      showNotification("error", "Błąd podczas usuwania osoby.");
     },
   });
 

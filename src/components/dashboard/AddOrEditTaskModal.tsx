@@ -12,8 +12,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
-// import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-// import dayjs from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 import { useNotification } from "../../assets/NotificationProvider";
 import { addTask, updateTask, type Task } from "./tasks";
 
@@ -96,7 +96,8 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
           render={({ field, fieldState }) => (
             <TextField
               {...field}
-              label="Opis zadania"
+              label="Opis zadania*"
+              className="mb-2"
               multiline
               rows={3}
               fullWidth
@@ -106,15 +107,18 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
             />
           )}
         />
+
         <Controller
           name="deadline"
           control={control}
           render={({ field }) => (
-            <TextField
+            <DatePicker
+              className="w-100 mb-3"
+              format="DD/MM/YYYY"
+              label="Data*"
               {...field}
-              label="Termin"
-              className="w-50"
-              margin="dense"
+              value={field.value ? dayjs(field.value) : null}
+              onChange={(newValue) => field.onChange(newValue?.toDate())}
             />
             // <DatePicker
             //   className="w-100 mb-3"

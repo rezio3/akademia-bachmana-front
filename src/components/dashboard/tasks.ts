@@ -42,6 +42,20 @@ export const updateTask = async (task: Task & { _id: string }) => {
   return res.json();
 };
 
+export const toggleTaskCompletion = async (_id: string) => {
+  const res = await fetch(`${baseUrl}api/tasks/${_id}/toggle`, {
+    method: "PATCH",
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(res.status, errorText);
+    throw new Error("Błąd podczas zmiany statusu zadania");
+  }
+
+  return res.json();
+};
+
 export const deleteTask = async (_id: string) => {
   const res = await fetch(`${baseUrl}api/tasks/${_id}`, {
     method: "DELETE",
@@ -59,7 +73,7 @@ export const deleteTask = async (_id: string) => {
 export type Task = {
   _id: string;
   description: string;
-  deadline?: string | Nil;
+  deadline?: Date | Nil;
   completed: boolean;
 };
 

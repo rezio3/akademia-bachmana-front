@@ -59,9 +59,8 @@ export const deletePlace = async (_id: string) => {
   });
 
   if (!res.ok) {
-    const errorText = await res.text();
-    console.error(res.status, errorText);
-    throw new Error("Błąd podczas usuwania placówki");
+    const errorData = await res.json();
+    throw new Error(errorData.message || "Błąd podczas usuwania placówki");
   }
 
   return res.json();

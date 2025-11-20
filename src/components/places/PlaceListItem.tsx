@@ -31,8 +31,18 @@ const PlaceListItem: React.FC<PlaceListItemProps> = ({ place }) => {
       });
       showNotification("success", "Usunięto placówkę.");
     },
-    onError: (error) => {
-      showNotification("error", "Błąd podczas usuwania placówki.");
+    onError: (error: any) => {
+      const errorMessage = error.message || "";
+      console.log("ERROR");
+      console.log(errorMessage);
+      if (errorMessage.includes("przypisane audycje")) {
+        showNotification(
+          "error",
+          "Nie można usunąć placówki, ponieważ ma przypisane audycje."
+        );
+      } else {
+        showNotification("error", "Błąd podczas usuwania placówki.");
+      }
       console.error("Błąd podczas usuwania placówki:", error);
     },
   });
