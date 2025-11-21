@@ -18,7 +18,11 @@ import { Controller, useForm } from "react-hook-form";
 import { queryKeys } from "../../assets/queryKeys";
 import { useEffect } from "react";
 import SelectPlace from "../Selects/SelectPlace";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import {
+  DatePicker,
+  renderTimeViewClock,
+  TimePicker,
+} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import SelectPerson from "../Selects/SelectPerson";
 import { useNotification } from "../../assets/NotificationProvider";
@@ -151,6 +155,11 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
                 ampm={false}
                 label="Godzina od*"
                 {...field}
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(newValue) => field.onChange(newValue?.toDate())}
                 slotProps={{
@@ -172,6 +181,11 @@ const AddOrEditAudycjaModal: React.FC<AddOrEditAudycjaModalProps> = ({
                 ampm={false}
                 label="Godzina do*"
                 {...field}
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
                 value={field.value ? dayjs(field.value) : null}
                 onChange={(newValue) => field.onChange(newValue?.toDate())}
                 slotProps={{
