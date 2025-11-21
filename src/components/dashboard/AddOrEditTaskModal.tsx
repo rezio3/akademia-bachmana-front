@@ -115,7 +115,7 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
             <DatePicker
               className="w-100 mb-3"
               format="DD/MM/YYYY"
-              label="Data*"
+              label="Data"
               {...field}
               value={field.value ? dayjs(field.value) : null}
               onChange={(newValue) => field.onChange(newValue?.toDate())}
