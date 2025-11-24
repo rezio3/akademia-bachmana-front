@@ -55,14 +55,14 @@ const LoginPage = () => {
 
       <div className="d-flex flex-column gap-3" style={{ minWidth: 300 }}>
         <TextField
-          label="Login"
+          label="Login (admin)"
           variant="outlined"
           value={login}
           onChange={(e) => setLogin(e.target.value)}
           disabled={loginMutation.isPending}
         />
         <TextField
-          label="Hasło"
+          label="Hasło (admin123)"
           variant="outlined"
           type="password"
           value={password}
