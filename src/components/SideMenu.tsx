@@ -91,6 +91,10 @@ const SideMenu = () => {
             <CustomText fontWeight={400} fontSize={24} headerType="h3">
               Akademia Bachmana
             </CustomText>
+            {/* TO DELETE VVVVVVVVVVVVVVVVVV */}
+            <CustomText fontWeight={400} fontSize={14} headerType="h3">
+              test
+            </CustomText>
           </div>
           <Divider
             className="mb-2"

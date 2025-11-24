@@ -97,6 +97,10 @@ const ReminderModal: React.FC<ReminderModalProps> = ({
           )}
         />
       </DialogContent>
+      {/* TO DELETE VVVVVVVVVVVVVVVVVVVVVVV */}
+      <span className="ms-4 mb-3 text-danger">
+        Przypomnienie nie zostanie wysłane na wersji testowej.
+      </span>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>
           Anuluj
