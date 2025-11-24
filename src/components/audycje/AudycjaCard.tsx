@@ -85,6 +85,8 @@ const AudycjaCard: React.FC<AudycjaCardProps> = ({
         <div>
           <div className="d-flex justify-content-between mb-2">
             {isDashboardViewCard ? (
+              // TO DELETE VVVVVVVVVVVVV
+              //@ts-ignore
               <CountdownTimer endDate={audycja.endDate} />
             ) : (
               <CustomText fontSize={14} headerType="span" fontWeight={600}>
